@@ -25,4 +25,5 @@ jobs:
 
     - name: Validate Stackql Version
       run: |
+        find ~ -name stackql -exec chmod +x {} \;
         stackql --version
