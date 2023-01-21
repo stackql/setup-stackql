@@ -24,4 +24,4 @@ jobs:
       uses: ./
 
     - name: Validate Stackql Version
-      run: stackql --version
+      run: sudo stackql --version

@@ -21,16 +21,15 @@ async function downloadCLI(){
         const url = urls['ubuntu']
         const pathToCLIZip = await tc.downloadTool(url);
 
-        console.log('path to CLI Zip is %o', pathToCLIZip)
-
         let pathToCLI = '';
   
         pathToCLI = await tc.extractZip(pathToCLIZip);
 
         fs.chmodSync(pathToCLI, '755');
 
-        core.addPath(pathToCLI);
-      
+        core.debug(`Stackql CLI path is ${pathToCLI}.`);
+
+        return pathToCLI      
     
     } catch (error) {
         core.error(error);
@@ -40,7 +39,9 @@ async function downloadCLI(){
 
 async function setup(){
 
-  await downloadCLI(os)
+  const path = await downloadCLI()
+  
+  core.addPath(path)
 }
 
 (async () => {
