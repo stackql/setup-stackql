@@ -6712,9 +6712,7 @@ const tc = __nccwpck_require__(3203);
 
 
 const urls = {
-    'windows': 'https://releases.stackql.io/stackql/latest/stackql_windows_amd64.zip',
-    'ubuntu': 'https://storage.googleapis.com/stackql-public-releases/latest/stackql_darwin_multiarch.pkg',
-    'macos': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip'
+    'ubuntu': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
 }
 
 
