@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "ncc build index.js --out dist"
+    "build": "ncc build index.js --out dist",
+    "postinstall": "husky install"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/stackql/setup-stackql/issues"
   },
-  "homepage": "https://github.com/stackql/setup-stackql#readme"
+  "homepage": "https://github.com/stackql/setup-stackql#readme",
+  "devDependencies": {
+    "husky": "^8.0.3"
+  }
 }
