@@ -14,7 +14,7 @@ defaults:
 jobs:
   stackql-versions:
     name: 'Stackql Versions'
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
