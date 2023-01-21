@@ -3,9 +3,10 @@ const os = require('os');
 const path = require('path');
 
 // External
-const core = require('@actions/core');
 const tc = require('@actions/tool-cache');
 const io = require('@actions/io');
+const core = require('@actions/core');
+
 
 const urls = {
     'windows': 'https://releases.stackql.io/stackql/latest/stackql_windows_amd64.zip',
