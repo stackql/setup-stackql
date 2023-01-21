@@ -27,7 +27,7 @@ async function downloadCLI(){
 
         fs.chmodSync(pathToCLI, '777')
 
-        core.debug(`Stackql CLI path is ${pathToCLI}.`);
+        core.info(`Stackql CLI path is ${pathToCLI}.`);
 
         return pathToCLI      
     
@@ -42,7 +42,7 @@ async function setup(){
   const path = await downloadCLI()
 
   core.addPath(path)
-  core.debug('Stackql CLI path %o', io.which('stackql'))
+  core.info('Stackql CLI path %o', io.which('stackql'))
 
 }
 
