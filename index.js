@@ -42,6 +42,8 @@ async function setup(){
   const path = await downloadCLI()
 
   core.addPath(path)
+  core.debug('Stackql CLI path %o', io.which('stackql'))
+
 }
 
 (async () => {
