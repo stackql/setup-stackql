@@ -25,6 +25,7 @@ async function downloadCLI(){
   
         pathToCLI = await tc.extractZip(pathToCLIZip);
 
+        fs.chmodSync(pathToCLI, '777')
 
         core.info(`Stackql CLI path is ${pathToCLI}.`);
 
