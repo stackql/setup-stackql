@@ -6708,7 +6708,7 @@ const path = __nccwpck_require__(1017);
 const io = __nccwpck_require__(9631);
 const core = __nccwpck_require__(4695);
 const tc = __nccwpck_require__(3203);
-
+const { execSync } = __nccwpck_require__(2081);
 
 
 const urls = {
@@ -6739,12 +6739,21 @@ async function downloadCLI(){
       }
 }
 
+async function addPermission(){
+  try {
+    execSync("find ~ -name stackql -exec chmod +x {} \\;");
+    console.log("Successfully gave execute permission to stackql");
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
+}
+
 async function setup(){
 
   const path = await downloadCLI()
 
   core.addPath(path)
-
+  await addPermission()
 }
 
 (async () => {

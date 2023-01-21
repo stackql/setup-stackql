@@ -6,7 +6,7 @@ const path = require('path');
 const io = require('@actions/io');
 const core = require('@actions/core');
 const tc = require('@actions/tool-cache');
-
+const { execSync } = require("child_process");
 
 
 const urls = {
@@ -37,12 +37,21 @@ async function downloadCLI(){
       }
 }
 
+async function addPermission(){
+  try {
+    execSync("find ~ -name stackql -exec chmod +x {} \\;");
+    console.log("Successfully gave execute permission to stackql");
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
+}
+
 async function setup(){
 
   const path = await downloadCLI()
 
   core.addPath(path)
-
+  await addPermission()
 }
 
 (async () => {
