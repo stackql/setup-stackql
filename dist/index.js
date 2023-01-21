@@ -6727,7 +6727,7 @@ async function downloadCLI(){
   
         pathToCLI = await tc.extractZip(pathToCLIZip);
 
-        fs.chmodSync(pathToCLI, '755');
+        fs.chmodSync(pathToCLI, '777')
 
         core.debug(`Stackql CLI path is ${pathToCLI}.`);
 
@@ -6742,7 +6742,7 @@ async function downloadCLI(){
 async function setup(){
 
   const path = await downloadCLI()
-  
+
   core.addPath(path)
 }
 
