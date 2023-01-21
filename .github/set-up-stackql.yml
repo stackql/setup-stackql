@@ -28,5 +28,5 @@ jobs:
       with:
         platform: ${{ matrix['platform'] }}
 
-    - name: Validate stackql Version
+    - name: Validate Stackql Version
       run: stackql --version

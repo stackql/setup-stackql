@@ -17,7 +17,19 @@ async function downloadCLI(os){
     try {
         const url = urls[os]
         const pathToCLIZip = await tc.downloadTool(url);
-        core.addPath(pathToCLIZip);
+
+        let pathToCLI = '';
+        if (os.platform().startsWith('win')) {
+          core.debug(`Stackql CLI Download Path is ${pathToCLIZip}`);
+          const fixedPathToCLIZip = `${pathToCLIZip}.zip`;
+          io.mv(pathToCLIZip, fixedPathToCLIZip);
+          core.debug(`Moved download to ${fixedPathToCLIZip}`);
+          pathToCLI = await tc.extractZip(fixedPathToCLIZip);
+        } else {
+          pathToCLI = await tc.extractZip(pathToCLIZip);
+        }
+        core.addPath(pathToCLI);
+      
     
     } catch (error) {
         core.error(error);
@@ -32,7 +44,7 @@ async function setup(){
   if(!(Object.keys(urls).includes(os))){
     throw Error('Cannot find os name %o', os)
   }
-  
+
   await downloadCLI(os)
 }
 
