@@ -4,7 +4,7 @@ author: 'Yuncheng Yang, StackQL'
 inputs:
   platform:
     description: 'Platform that function is running on'
-    required: true
+    required: false
   # authentications_object_string:
   #   description: 'The authentication object'
   #   required: true
@@ -14,7 +14,7 @@ inputs:
   #   required: false
 runs:
   using: 'node16'
-  main: 'index.js'
+  main: './index.js'
 branding:
   icon: 'terminal'
   color: 'purple'

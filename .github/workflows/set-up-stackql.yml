@@ -15,9 +15,6 @@ jobs:
   stackql-versions:
     name: 'Stackql Versions'
     runs-on: ${{ matrix.platform }}
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
 
     steps:
     - name: Checkout
@@ -25,8 +22,6 @@ jobs:
 
     - name: Setup stackql
       uses: ./
-      with:
-        platform: ${{ matrix['platform'] }}
 
     - name: Validate Stackql Version
       run: stackql --version

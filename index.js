@@ -13,9 +13,15 @@ const urls = {
     'macos': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip'
 }
 
-async function downloadCLI(os){
+async function downloadCLI(){
     try {
-        const url = urls[os]
+      const osName = os.platform().split('-')[0]
+    
+      if(!(Object.keys(urls).includes(osName))){
+        throw Error('Cannot find os name %o', osName)
+      }
+    
+        const url = urls[osName]
         const pathToCLIZip = await tc.downloadTool(url);
 
         let pathToCLI = '';
@@ -38,12 +44,6 @@ async function downloadCLI(os){
 }
 
 async function setup(){
-  const platform = core.getInput('running-platform');
-  const os = platform.split('-')[0]
-
-  if(!(Object.keys(urls).includes(os))){
-    throw Error('Cannot find os name %o', os)
-  }
 
   await downloadCLI(os)
 }
