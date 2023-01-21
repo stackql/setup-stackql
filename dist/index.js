@@ -6729,6 +6729,8 @@ async function downloadCLI(){
   
         pathToCLI = await tc.extractZip(pathToCLIZip);
 
+        fs.chmodSync(pathToCLI, '755');
+
         core.addPath(pathToCLI);
       
     
