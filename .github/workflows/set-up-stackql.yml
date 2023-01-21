@@ -25,6 +25,7 @@ jobs:
 
     - name: Validate Stackql Version
       run: |
+        which which
         which stackql
         chmod +x $(which stackql)
         stackql --version
