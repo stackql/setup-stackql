@@ -17,10 +17,11 @@ const urls = {
 
 async function downloadCLI(){
     try {
+      const platform = os.platform()
       const osName = os.platform().split('-')[0]
     
       if(!(Object.keys(urls).includes(osName))){
-        throw Error('Cannot find os name %o', osName)
+        throw Error('Cannot find os name %o', platform)
       }
     
         const url = urls[osName]
