@@ -24,4 +24,6 @@ jobs:
       uses: ./
 
     - name: Validate Stackql Version
-      run: stackql --version
+      run: |
+        chmod +x $(which stackql)
+        stackql --version
