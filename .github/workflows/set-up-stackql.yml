@@ -30,6 +30,6 @@ jobs:
       run: |
         stackql --version
 
-    - name: Pull Github
+    - name: Use GitHub Provider
       run: |
         stackql exec -i ./examples/get-github-commits.iql --auth="${AUTH}"
