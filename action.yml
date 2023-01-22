@@ -4,7 +4,7 @@ author: 'Yuncheng Yang, StackQL'
 inputs:
   authObjString:
     description: 'The authentication object'
-    required: false
+    required: true
 
 runs:
   using: 'node16'

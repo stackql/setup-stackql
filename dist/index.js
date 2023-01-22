@@ -6772,8 +6772,8 @@ async function setupAuth(){
   const authObjString = core.getInput("authObjString");
   try {
     core.info(`auth Obj string is ${authObjString}` )
-    
-    if(!authObjString) {
+
+    if(!authObjString || !authObjString.trim().length ) {
       throw Error ('Cannot find auth object string')
     }
 
