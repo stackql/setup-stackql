@@ -6772,6 +6772,11 @@ async function setupAuth(){
   const authObjString = core.getInput("authObjString");
   try {
     core.info(`auth Obj string is ${authObjString}` )
+    
+    if(!authObjString) {
+      throw Error ('Cannot find auth object string')
+    }
+
     const authObj = JSON.parse(authObjString)
     Object.keys(authObj).forEach(providerName =>{
       const providerAuth = authObj[providerName]
