@@ -1,4 +1,4 @@
-name: 'Setup Terraform'
+name: 'Setup StackQL'
 
 on:
   push:
@@ -22,8 +22,8 @@ jobs:
 
     - name: Setup stackql
       uses: ./
-      # with:
-      #   # authObjString: ${{ secrets.AUTH_OBJECT_STR }}
+      with:
+        authObjString: 'test'
 
 
     - name: Validate Stackql Version
