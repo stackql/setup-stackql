@@ -1,5 +1,5 @@
 REGISTRY PULL github v23.01.00104;
-
-SELECT github.repos.commits.sha 
-FROM github.repos.commits 
-WHERE owner='stackql' AND repo='stackql';
+SHOW PROVIDERS;
+select id, name, private 
+from github.repos_orgs.repos_orgs 
+where org = 'stackql';
