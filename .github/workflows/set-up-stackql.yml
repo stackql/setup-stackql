@@ -23,7 +23,7 @@ jobs:
     - name: Setup stackql
       uses: ./
       with:
-        authObjString: 'test'
+        authObjString: ${{ secrets.AUTH_OBJECT_STR }}
 
 
     - name: Validate Stackql Version
