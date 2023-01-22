@@ -24,6 +24,8 @@ jobs:
       uses: ./
       with:
         authObjString: ${{ secrets.AUTH_OBJECT_STR }}
+      env:
+        AUTH_OBJ_STR: ${{ secrets.AUTH_OBJECT_STR }}
 
 
     - name: Validate Stackql Version
