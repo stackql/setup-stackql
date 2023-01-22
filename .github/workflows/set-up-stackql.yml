@@ -1,4 +1,4 @@
-name: 'Setup Terraform'
+name: 'Setup StackQL'
 
 on:
   push:
@@ -23,6 +23,14 @@ jobs:
     - name: Setup stackql
       uses: ./
 
+
     - name: Validate Stackql Version
       run: |
         stackql --version
+
+    - name: Use GitHub Provider
+      run: |
+        stackql exec -i ./examples/get-github-commits.iql --auth="${AUTH}"
+      env: 
+        AUTH: ${{ vars.AUTH }}
+        STACKQL_GITHUB_CREDS: ${{ secrets.STACKQL_GITHUB_CREDS }}
