@@ -19,11 +19,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        authObjString: ${{secrets.AUTH_OBJECT_STR}}
 
     - name: Setup stackql
       uses: ./
-      with:
-        authObjString: ${{secrets.AUTH_OBJECT_STR}}
+
 
     - name: Validate Stackql Version
       run: |
