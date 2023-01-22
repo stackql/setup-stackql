@@ -32,4 +32,4 @@ jobs:
 
     - name: Pull Github
       run: |
-        stackql exec -i ./examples/get-github-commits --auth="${AUTH}"
+        stackql exec -i ./examples/get-github-commits.iql --auth="${AUTH}"
