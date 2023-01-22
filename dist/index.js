@@ -6771,7 +6771,6 @@ async function setupAuth(){
    */
   const authObjString = core.getInput("authObjString");
   try {
-    core.info(`auth Obj string is ${authObjString}` )
 
     if(!authObjString || authObjString === "" ) {
       throw Error ('Cannot find auth object string')
@@ -6788,7 +6787,7 @@ async function setupAuth(){
     })
 
     const stackqlAuthString = JSON.stringify(authObj)
-    core.info('Setting AUTH string %o', stackqlAuthString)
+    core.info(`Setting AUTH string ${stackqlAuthString}` )
     core.exportVariable('AUTH', stackqlAuthString)
     
   } catch (error) {
