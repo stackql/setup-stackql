@@ -1,0 +1,4 @@
+REGISTRY PULL google v23.01.00116;
+SHOW PROVIDERS;
+select name
+from google.cloudasset.assets;
