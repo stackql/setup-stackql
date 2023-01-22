@@ -20,7 +20,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        authObjString: ${{secrets.AUTH_OBJECT_STR}}
+        authObjString: ${{ secrets.AUTH_OBJECT_STR }}
 
     - name: Setup stackql
       uses: ./
