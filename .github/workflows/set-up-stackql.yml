@@ -33,4 +33,4 @@ jobs:
         stackql exec -i ./examples/get-github-commits.iql --auth="${AUTH}"
       env: 
         AUTH: ${{ vars.AUTH }}
-        GITHUB_CREDS: ${{ secrets.STACKQL_GITHUB_CREDS }}
+        STACKQL_GITHUB_CREDS: ${{ secrets.STACKQL_GITHUB_CREDS }}
