@@ -6748,12 +6748,57 @@ async function addPermission(){
   }
 }
 
+async function setupAuth(){
+  /**
+   * AUTH='{ "google": { "credentialsfilepath": "creds/stackql-demo.json",  "type": "service_account" }, 
+   * "okta": { "credentialsenvvar": "OKTA_SECRET_KEY", "type": "api_key", credentials: '<your credentials>' }}'
+   */
+  /**
+   * expected auth obj
+   * {
+   * okta :{
+   * type: "api_key",
+   * credentialsenvvar: 'OKTA_SECRET_KEY',
+   * credentials: '<the credential>'
+   * }
+   * }
+   */
+
+  /**
+   * When credentials envvar exist, set a env var in the action
+   * key = <value of credentialsenvvar in auth obj>
+   * value = <value of credentials in auth obj>
+   */
+  const authObjString = core.getInput("authObjString");
+  try {
+    const authObj = JSON.parse(authObjString)
+    Object.keys(authObj).forEach(providerName =>{
+      const providerAuth = authObj[providerName]
+      if (providerAuth.credentialsenvvar && providerAuth.credentials) {
+        core.exportVariable(providerAuth.credentialsenvvar, providerAuth.credentials)
+        delete authObj[providerName]['credentials']
+      }
+      //TODO: if provider auth is a file  
+    
+    })
+
+    const stackqlAuthString = JSON.stringify(authObj)
+    core.info('Setting AUTH string %o', stackqlAuthString)
+    core.exportVariable('AUTH', stackqlAuthString)
+    
+  } catch (error) {
+      throw Error('Error when setup auth %o', error)
+  }
+
+}
+
 async function setup(){
 
   const path = await downloadCLI()
 
   core.addPath(path)
   await addPermission()
+  setupAuth()
 }
 
 (async () => {
