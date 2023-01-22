@@ -77,7 +77,6 @@ async function setupAuth(){
         delete authObj[providerName]['credentials']
       }
       //TODO: if provider auth is a file  
-    
     })
 
     const stackqlAuthString = JSON.stringify(authObj)
@@ -85,7 +84,7 @@ async function setupAuth(){
     core.exportVariable('AUTH', stackqlAuthString)
     
   } catch (error) {
-      throw Error('Error when setup auth %o', error)
+      throw Error(`Error when setup auth ${error}`)
   }
 
 }
