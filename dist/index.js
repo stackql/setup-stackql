@@ -6771,6 +6771,7 @@ async function setupAuth(){
    */
   const authObjString = core.getInput("authObjString");
   try {
+    core.info(core.getInput("authObjString"))
     core.info(`auth Obj string is ${authObjString}` )
 
     if(!authObjString || !authObjString.trim().length ) {
