@@ -29,3 +29,7 @@ jobs:
     - name: Validate Stackql Version
       run: |
         stackql --version
+
+    - name: Pull Github
+      run: |
+        stackql exec "REGISTRY PULL github v23.01.00104;"" --auth="${AUTH}"
