@@ -37,8 +37,8 @@ jobs:
 
     - name: use Google Provider
       run: | ## use the secret to create json file
-        sudo echo $GOOGLE_CREDS > sa-key.json
+        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
         stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
       env:
-        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "creds/sa-key.json" }}'
+        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
         GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
