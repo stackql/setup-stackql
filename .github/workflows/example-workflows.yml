@@ -33,7 +33,7 @@ jobs:
         stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
       env: 
         AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
-        STACKQL_GITHUB_CREDS: ${{ secrets.STACKQL_GITHUB_CREDS }}
+        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
 
     - name: use Google Provider
       run: | ## use the secret to create json file
