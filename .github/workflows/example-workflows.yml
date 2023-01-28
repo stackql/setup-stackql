@@ -41,4 +41,3 @@ jobs:
         stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
       env:
         AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
-        GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
