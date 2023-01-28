@@ -1,0 +1,43 @@
+name: 'Setup StackQL'
+
+on:
+  push:
+    branches:
+    - main
+    - 'develop-**'
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  stackql-versions:
+    name: 'Stackql Versions'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup stackql
+      uses: ./
+
+
+    - name: Validate Stackql Version
+      run: |
+        stackql --version
+
+    - name: Use GitHub Provider
+      run: |
+        stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
+      env: 
+        AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
+
+    - name: use Google Provider
+      run: | ## use the secret to create json file
+        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
+      env:
+        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
