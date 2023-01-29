@@ -1,7 +1,11 @@
 name: 'StackQL Studio - Setup StackQL'
 description: 'Sets up StackQL CLI in your GitHub Actions workflow.'
 author: 'Yuncheng Yang, StackQL'
-
+inputs:
+  use_wrapper:
+    description: 'Whether or not to install a wrapper to wrap subsequent calls of the `stackql` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.'
+    default: 'true'
+    required: false
 
 runs:
   using: 'node16'

@@ -1,6 +1,6 @@
 # setup-stackql
 
-The `stackql/setup-stackql` action is a JavaScript action that sets up Terraform CLI in your GitHub Actions workflow by:
+The `stackql/setup-stackql` action is a JavaScript action that sets up StackQL CLI in your GitHub Actions workflow by:
 
 - Downloading a latest Stackql CLI and adding it to the `PATH`.
 - Setup AUTH env var in the Github Action
