@@ -6759,10 +6759,10 @@ async function installWrapper (pathToCLI) {
   try {
     source = [pathToCLI, `stackql${exeSuffix}`].join(path.sep);
     target = [pathToCLI, `stackql-bin${exeSuffix}`].join(path.sep);
-    core.debug(`Moving ${source} to ${target}.`);
+    console.log(`Moving ${source} to ${target}.`);
     await io.mv(source, target);
   } catch (e) {
-    core.error(`Unable to move ${source} to ${target}.`);
+    console.log(`Unable to move ${source} to ${target}.`);
     throw e;
   }
 
@@ -6770,7 +6770,7 @@ async function installWrapper (pathToCLI) {
   try {
     source = path.resolve([__dirname, '..', 'wrapper', 'dist', 'index.js'].join(path.sep));
     target = [pathToCLI, 'stackql'].join(path.sep);
-    core.debug(`Copying ${source} to ${target}.`);
+    console.log(`Copying ${source} to ${target}.`);
     await io.cp(source, target);
   } catch (e) {
     core.error(`Unable to copy ${source} to ${target}.`);
@@ -6789,9 +6789,8 @@ async function setup(){
   core.addPath(path)
   await addPermission()
   const wrapper = core.getInput('use_wrapper') === 'true';
-  core.debug('use wrapper', wrapper)
   if(wrapper){
-    core.debug('installing wrapper')
+    console.log('installing wrapper')
     await installWrapper(path)
   }
 }
