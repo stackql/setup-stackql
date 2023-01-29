@@ -88,7 +88,7 @@ async function setup(){
   await addPermission()
   const wrapper = core.getInput('use_wrapper') === 'true';
   if(wrapper){
-    await installWrapper()
+    await installWrapper(path)
   }
 }
 
