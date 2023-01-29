@@ -12,7 +12,7 @@ defaults:
     shell: bash
 
 jobs:
-  stackql-versions:
+  stackql-tests:
     name: 'Stackql Versions'
     runs-on: ubuntu-latest
 
@@ -22,6 +22,8 @@ jobs:
 
     - name: Setup stackql
       uses: ./
+      with:
+        use_wrapper: true
 
 
     - name: Validate Stackql Version
