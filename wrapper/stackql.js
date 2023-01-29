@@ -31,10 +31,10 @@ async function checkStackQL () {
     ignoreReturnCode: true
   };
   const exitCode = await exec(pathToCLI, args, options);
-  console.log(`StackQL exited with code ${exitCode}.`);
-  console.log(`stdout: ${stdout.contents}`);
+  core.debug(`StackQL exited with code ${exitCode}.`);
+  core.debug(`stdout: ${stdout.contents}`);
   console.log(`stderr: ${stderr.contents}`);
-  console.log(`exitcode: ${exitCode}`);
+  core.debug(`exitcode: ${exitCode}`);
 
   // Set outputs, result, exitcode, and stderr
   core.setOutput('stdout', stdout.contents);
