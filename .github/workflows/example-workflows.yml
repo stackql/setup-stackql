@@ -13,7 +13,7 @@ defaults:
 
 jobs:
   stackql-tests:
-    name: 'Stackql Versions'
+    name: 'Stackql Examples'
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +23,7 @@ jobs:
     - name: Setup stackql
       uses: ./
       with:
-        use_wrapper: true
+        use_wrapper: 'true'
 
 
     - name: Validate Stackql Version
