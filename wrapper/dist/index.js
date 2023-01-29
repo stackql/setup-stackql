@@ -4201,13 +4201,12 @@ async function checkStackQL () {
   const exitCode = await exec(pathToCLI, args, options);
   core.debug(`StackQL exited with code ${exitCode}.`);
   core.debug(`stdout: ${stdout.contents}`);
-  console.log(`stderr: ${stderr.contents}`);
+  core.debug(`stderr: ${stderr.contents}`);
   core.debug(`exitcode: ${exitCode}`);
 
   // Set outputs, result, exitcode, and stderr
   core.setOutput('stdout', stdout.contents);
   core.setOutput('stderr', stderr.contents);
-  core.setOutput('exitcode', exitCode.toString(10));
 
   if ((exitCode === 0 || exitCode === 2) && !stderr.contents) {
     // A exitCode of 0 is considered a success
@@ -4218,7 +4217,7 @@ async function checkStackQL () {
   }
 
   // A non-zero exitCode is considered an error
-  core.setFailed(`StackQL exited with error ${stderr.contents}.`);
+  core.setFailed(`StackQL exited with error: ${stderr.contents}.`);
 })();
 
 })();
