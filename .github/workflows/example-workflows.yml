@@ -37,14 +37,15 @@ jobs:
         AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
         STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
 
-    - name: use Google Provider
+    - name: Use Google Provider
       run: | ## use the secret to create json file
         sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
         stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
       env:
         AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
 
-    - name: handle error
-      run: | ## use the secret to create json file
-        stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
+    ##### uncomment the step to see error handling
+    # - name: Handle error
+    #   run: | ## use the secret to create json file
+    #     stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
 
