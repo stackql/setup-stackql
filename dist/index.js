@@ -6789,6 +6789,7 @@ async function setup(){
   core.addPath(path)
   await addPermission()
   const wrapper = core.getInput('use_wrapper') === 'true';
+  core.debug('use wrapper', wrapper)
   if(wrapper){
     core.debug('installing wrapper')
     await installWrapper(path)
