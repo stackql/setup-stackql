@@ -86,7 +86,7 @@ async function setup(){
 
   core.addPath(path)
   await addPermission()
-  const wrapper = core.getInput('terraform_wrapper') === 'true';
+  const wrapper = core.getInput('use_wrapper') === 'true';
   if(wrapper){
     await installWrapper()
   }
