@@ -4209,7 +4209,7 @@ async function checkStackQL () {
   core.setOutput('stderr', stderr.contents);
   core.setOutput('exitcode', exitCode.toString(10));
 
-  if (exitCode === 0 || exitCode === 2) {
+  if (exitCode === 0 || exitCode === 2 || !stderr.contents) {
     // A exitCode of 0 is considered a success
     // An exitCode of 2 may be returned when the '-detailed-exitcode' option
     // is passed to plan. This denotes Success with non-empty
@@ -4218,7 +4218,7 @@ async function checkStackQL () {
   }
 
   // A non-zero exitCode is considered an error
-  core.setFailed(`StackQL exited with code ${exitCode}.`);
+  core.setFailed(`StackQL exited with error ${stderr.contents}.`);
 })();
 
 })();
