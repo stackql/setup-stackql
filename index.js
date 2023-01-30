@@ -22,7 +22,8 @@ async function downloadCLI(osPlatform){
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(url));
       case 'darwin':
-        let tmpPath = await tc.extractXar(await tc.downloadTool(url));
+        // let tmpPath = await tc.extractXar(await tc.downloadTool(url));
+        let tmpPath = await tc.downloadTool(url);
         core.info(`extracting mac pkg in ${tmpPath}...`);
         const installPath = '/Users/runner/work/_temp/stackql';
         execSync(`pkgutil --expand-full ${tmpPath} ${installPath}`);
