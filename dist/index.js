@@ -6721,27 +6721,30 @@ async function downloadCLI(osPlatform){
     const url = urls[osPlatform]
     core.debug(`binary location: ${url}`);
 
-    let pathToCLI = '';
+    // let pathToCLI = '';
 
     switch (osPlatform) {
       case 'win32':
         const pathToWinZip = await tc.downloadTool(url);
-        pathToCLI = await tc.extractZip(pathToWinZip);
-        core.debug(`path to cli: ${pathToCLI}`);
-        fs.chmodSync(pathToCLI, '777');
-        return pathToCLI;
+        return await tc.extractZip(pathToWinZip);
+        // pathToCLI = await tc.extractZip(pathToWinZip);
+        // core.debug(`path to cli: ${pathToCLI}`);
+        // fs.chmodSync(pathToCLI, '777');
+        // return pathToCLI;
       case 'darwin':
         const pathToMacPkg = await tc.downloadTool(url);
-        pathToCLI = await tc.extractXar(pathToMacPkg);
-        core.debug(`path to cli: ${pathToCLI}`);
-        fs.chmodSync(pathToCLI, '777');
-        return pathToCLI;
+        return await tc.extractXar(pathToMacPkg);
+        // pathToCLI = await tc.extractXar(pathToMacPkg);
+        // core.debug(`path to cli: ${pathToCLI}`);
+        // fs.chmodSync(pathToCLI, '777');
+        // return pathToCLI;
       case 'linux':
         const pathToLinuxZip = await tc.downloadTool(url);
-        pathToCLI = await tc.extractZip(pathToLinuxZip);
-        core.debug(`path to cli: ${pathToCLI}`);
-        fs.chmodSync(pathToCLI, '777');
-        return pathToCLI;
+        return await tc.extractZip(pathToLinuxZip);
+        // pathToCLI = await tc.extractZip(pathToLinuxZip);
+        // core.debug(`path to cli: ${pathToCLI}`);
+        // fs.chmodSync(pathToCLI, '777');
+        // return pathToCLI;
       default:
         throw new Error(`Unsupported platform: ${osPlatform}`);
     }
