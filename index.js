@@ -41,7 +41,7 @@ async function makeExecutable(cliPath, osPlatform){
       return;
     } else {
       core.debug(`making ${cliPath} executable...`);      
-      execSync(`chmod +x ${cliPath}`);
+      execSync(`chmod +x ${cliPath}/stackql`);
     }
     core.debug(`successfully made ${cliPath} executable`);
   } catch (error) {
