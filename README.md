@@ -1,3 +1,5 @@
+[![Setup StackQL](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql.yml/badge.svg)](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql.yml)  
+
 # setup-stackql
 
 The `stackql/setup-stackql` action is a JavaScript action that sets up StackQL CLI in your GitHub Actions workflow by:

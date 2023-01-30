@@ -84,6 +84,9 @@ async function setup(){
   console.log(`Platform: ${osPlatform}`);
   console.log(`Arch: ${osArch}`);
 
+  // Platform: linux
+  // Arch: x64
+
   const path = await downloadCLI()
 
   core.addPath(path)
