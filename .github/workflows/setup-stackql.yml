@@ -60,7 +60,7 @@ jobs:
     - name: Validate Stackql Version
       run: |
         brew install tree
-        tree /
+        tree /Users/runner
         stackql --version
 
     # - name: Use GitHub Provider
@@ -88,9 +88,9 @@ jobs:
     - name: Setup stackql
       uses: ./
 
-    # - name: Validate Stackql Version
-    #   run: |
-    #     stackql --version
+    - name: Validate Stackql Version
+      run: |
+        stackql.exe --version
 
     # - name: Use GitHub Provider
     #   run: |
