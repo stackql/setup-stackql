@@ -98,11 +98,11 @@ jobs:
         STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
 
     - name: Use Google Provider
+      env:
+        GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
+        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
       run: | ## use the secret to create json file
-        # sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-        $secrets = ${{ secrets.GOOGLE_CREDS }}
+        $secrets = (Get-Content env:GOOGLE_CREDS_ENV)
         $decoded = [System.Convert]::FromBase64String($secrets)
         [System.Text.Encoding]::UTF8.GetString($decoded) | Set-Content sa-key.json
         stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
-      env:
-        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
