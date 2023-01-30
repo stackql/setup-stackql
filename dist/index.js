@@ -6724,11 +6724,12 @@ async function downloadCLI(osPlatform){
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(url));
       case 'darwin':
-        // return await tc.extractXar(await tc.downloadTool(url));
-        let pkgFile = await tc.downloadTool(url);
-        core.info(`installing mac pkg: ${pkgFile}`);
-        execSync(`sudo installer -pkg ${pkgFile} -target "/"`);
-        return '/usr/local/bin';
+        // let tmpPath = await tc.extractXar(await tc.downloadTool(url));
+        let tmpPath = await tc.downloadTool(url);
+        core.info(`extracting mac pkg in ${tmpPath}...`);
+        const installPath = '~/Applications/stackql';
+        execSync(`pkgutil --expand ${tmpPath} ${installPath}`);
+        return installPath;
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(url));
       default:
@@ -6766,6 +6767,13 @@ async function setup() {
 
     // download and extract stackql binary
     const cliPath = await downloadCLI(osPlatform)
+    
+
+//     │   └── bdee0361-f719-433d-81b4-cce7f4d6c594
+// │       ├── Bom
+// │       ├── PackageInfo
+// │       └── Payload
+    
     core.debug(`path to cli: ${cliPath}`);
 
     // set perms and make executable
