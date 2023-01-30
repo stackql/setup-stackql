@@ -22,7 +22,11 @@ async function downloadCLI(osPlatform){
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(url));
       case 'darwin':
-        return await tc.extractXar(await tc.downloadTool(url));
+        // return await tc.extractXar(await tc.downloadTool(url));
+        let pkgFile = await tc.downloadTool(url);
+        core.info(`installing mac pkg: ${pkgFile}`);
+        execSync(`installer -pkg ${pkgFile} -target CurrentUserHomeDirectory`);
+        return '/usr/local/bin';
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(url));
       default:
