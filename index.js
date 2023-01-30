@@ -13,9 +13,6 @@ const urls = {
     'ubuntu': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
 }
 
-
-
-
 async function downloadCLI(){
     try {
         const url = urls['ubuntu']
@@ -81,6 +78,12 @@ async function installWrapper (pathToCLI) {
 
 
 async function setup(){
+
+  const osPlatform = os.platform();
+  const osArch = os.arch();
+
+  console.log(`Platform: ${osPlatform}`);
+  console.log(`Arch: ${osArch}`);
 
   const path = await downloadCLI()
 
