@@ -6725,22 +6725,26 @@ async function downloadCLI(osPlatform){
 
     switch (osPlatform) {
       case 'win32':
-        const pathToWinZip = await tc.downloadTool(url);
-        return await tc.extractZip(pathToWinZip);
+        // const pathToWinZip = await tc.downloadTool(url);
+        // return await tc.extractZip(pathToWinZip);
+        return await tc.extractZip(await tc.downloadTool(url));
+        
         // pathToCLI = await tc.extractZip(pathToWinZip);
-        // core.debug(`path to cli: ${pathToCLI}`);
-        // fs.chmodSync(pathToCLI, '777');
         // return pathToCLI;
       case 'darwin':
-        const pathToMacPkg = await tc.downloadTool(url);
-        return await tc.extractXar(pathToMacPkg);
+        // const pathToMacPkg = await tc.downloadTool(url);
+        // return await tc.extractXar(pathToMacPkg);
+        return await tc.extractXar(await tc.downloadTool(url));
+
         // pathToCLI = await tc.extractXar(pathToMacPkg);
         // core.debug(`path to cli: ${pathToCLI}`);
         // fs.chmodSync(pathToCLI, '777');
         // return pathToCLI;
       case 'linux':
-        const pathToLinuxZip = await tc.downloadTool(url);
-        return await tc.extractZip(pathToLinuxZip);
+        // const pathToLinuxZip = await tc.downloadTool(url);
+        // return await tc.extractZip(pathToLinuxZip);
+        return await tc.extractZip(await tc.downloadTool(url));
+
         // pathToCLI = await tc.extractZip(pathToLinuxZip);
         // core.debug(`path to cli: ${pathToCLI}`);
         // fs.chmodSync(pathToCLI, '777');
@@ -6755,21 +6759,22 @@ async function downloadCLI(osPlatform){
   }
 }
 
-async function makeExecutable(osPlatform){
+async function makeExecutable(path, osPlatform){
   try {
-    core.debug(`making ${pathToCLI} executable...`);
     if(osPlatform === 'win32'){
-      execSync("Get-ChildItem ~ -Filter 'stackql' | ForEach-Object { Set-ExecutionPolicy Unrestricted -Scope Process; $.FullName } | ForEach-Object { Set-ItemProperty $.FullName -Name IsReadOnly -Value $False } | ForEach-Object { & $_.FullName }");
+      return;
     } else {
-      execSync("find ~ -name stackql -exec chmod +x {} \\;");
+      core.debug(`making ${path} executable...`);      
+      execSync(`chmod +x ${path}`);
+      // execSync("find ~ -name stackql -exec chmod +x {} \\;");
     }
-    core.debug(`successfully made ${pathToCLI} executable`);
+    core.debug(`successfully made ${path} executable`);
   } catch (error) {
     core.error(`Error: ${error.message}`);
   }
 }
 
-async function installWrapper(pathToCLI) {
+async function installWrapper(path) {
   let source, target;
 
   // If we're on Windows, then the executable ends with .exe
@@ -6777,8 +6782,8 @@ async function installWrapper(pathToCLI) {
 
   // Rename stackql(.exe) to stackql-bin(.exe)
   try {
-    source = [pathToCLI, `stackql${exeSuffix}`].join(path.sep);
-    target = [pathToCLI, `stackql-bin${exeSuffix}`].join(path.sep);
+    source = [path, `stackql${exeSuffix}`].join(path.sep);
+    target = [path, `stackql-bin${exeSuffix}`].join(path.sep);
     core.debug(`Moving ${source} to ${target}.`);
     await io.mv(source, target);
   } catch (e) {
@@ -6789,7 +6794,7 @@ async function installWrapper(pathToCLI) {
   // Install our wrapper as stackql by moving the wrapped executable to stackql
   try {
     source = path.resolve([__dirname, '..', 'wrapper', 'dist', 'index.js'].join(path.sep));
-    target = [pathToCLI, 'stackql'].join(path.sep);
+    target = [path, 'stackql'].join(path.sep);
     core.debug(`Copying ${source} to ${target}.`);
     await io.cp(source, target);
   } catch (e) {
@@ -6798,7 +6803,7 @@ async function installWrapper(pathToCLI) {
   }
 
   // Export a new environment variable, so our wrapper can locate the binary
-  core.exportVariable('STACKQL_CLI_PATH', pathToCLI);
+  core.exportVariable('STACKQL_CLI_PATH', path);
 }
 
 
@@ -6810,9 +6815,10 @@ async function setup(){
   core.debug(`arch: ${osArch}`);
 
   const path = await downloadCLI(osPlatform)
-
+  core.debug(`path to cli: ${path}`);
+  fs.chmodSync(path, '777');
   core.addPath(path)
-  await makeExecutable(osPlatform)
+  await makeExecutable(path, osPlatform)
   const wrapper = core.getInput('use_wrapper') === 'true';
   if(wrapper){
     core.debug('installing wrapper')
