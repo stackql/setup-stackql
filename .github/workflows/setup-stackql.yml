@@ -28,6 +28,8 @@ jobs:
 
     - name: Validate Stackql Version
       run: |
+        ls -latr /home/runner/work/_temp/
+        tree /home/runner/work/_temp/
         stackql --version
 
     - name: Use GitHub Provider

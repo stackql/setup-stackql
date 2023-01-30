@@ -6795,7 +6795,7 @@ async function setup(){
 
   const cliPath = await downloadCLI(osPlatform)
   core.debug(`path to cli: ${cliPath}`);
-  
+
   core.debug(`updating permissions for ${cliPath}`);
   fs.chmodSync(cliPath, '777');
 
