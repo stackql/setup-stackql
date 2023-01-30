@@ -100,7 +100,7 @@ jobs:
     - name: Use Google Provider
       run: | ## use the secret to create json file
         # sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-        $secrets = (Get-Content env:GOOGLE_CREDS)
+        $secrets = ${{ secrets.GOOGLE_CREDS }}
         $decoded = [System.Convert]::FromBase64String($secrets)
         [System.Text.Encoding]::UTF8.GetString($decoded) | Set-Content sa-key.json
         stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
