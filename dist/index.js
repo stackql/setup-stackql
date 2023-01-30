@@ -6724,7 +6724,6 @@ async function downloadCLI(osPlatform){
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(url));
       case 'darwin':
-        // let tmpPath = await tc.extractXar(await tc.downloadTool(url));
         let tmpPath = await tc.downloadTool(url);
         core.info(`extracting mac pkg in ${tmpPath}...`);
         const installPath = '/Users/runner/work/_temp/stackql-pkg';
@@ -6767,12 +6766,6 @@ async function setup() {
 
     // download and extract stackql binary
     const cliPath = await downloadCLI(osPlatform)
-    
-
-//     │   └── bdee0361-f719-433d-81b4-cce7f4d6c594
-// │       ├── Bom
-// │       ├── PackageInfo
-// │       └── Payload
     
     core.debug(`path to cli: ${cliPath}`);
 
