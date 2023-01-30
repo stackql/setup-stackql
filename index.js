@@ -82,15 +82,14 @@ async function setup(){
   const osPlatform = os.platform();
   const osArch = os.arch();
 
-  console.log(`Platform: ${osPlatform}`);
-  console.log(`Arch: ${osArch}`);
-
   const path = await downloadCLI()
 
   core.addPath(path)
   await addPermission()
   const wrapper = core.getInput('use_wrapper') === 'true';
   if(wrapper){
+    console.log(`Platform: ${osPlatform}`);
+    console.log(`Arch: ${osArch}`);
     console.log('installing wrapper')
     await installWrapper(path)
   }
