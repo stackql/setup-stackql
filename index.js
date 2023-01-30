@@ -25,7 +25,7 @@ async function downloadCLI(osPlatform){
         // let tmpPath = await tc.extractXar(await tc.downloadTool(url));
         let tmpPath = await tc.downloadTool(url);
         core.info(`extracting mac pkg in ${tmpPath}...`);
-        const installPath = '~/Applications/stackql';
+        const installPath = '/Users/runner/work/_temp/';
         execSync(`pkgutil --expand ${tmpPath} ${installPath}`);
         return installPath;
       case 'linux':
