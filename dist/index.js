@@ -6703,6 +6703,7 @@ var __webpack_exports__ = {};
 const path = __nccwpck_require__(1017);
 const fs = __nccwpck_require__(7147);
 const os = __nccwpck_require__(2037);
+const { execSync } = __nccwpck_require__(2081);
 const core = __nccwpck_require__(8021);
 const tc = __nccwpck_require__(5394);
 
@@ -6791,7 +6792,6 @@ async function setup() {
 // const io = require('@actions/io');
 // const core = require('@actions/core');
 // const tc = require('@actions/tool-cache');
-// const { execSync } = require("child_process");
 
 // const urls = {
 //   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',

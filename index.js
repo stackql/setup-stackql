@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const { execSync } = require("child_process");
 const core = require('@actions/core');
 const tc = require('@actions/tool-cache');
 
@@ -89,7 +90,6 @@ async function setup() {
 // const io = require('@actions/io');
 // const core = require('@actions/core');
 // const tc = require('@actions/tool-cache');
-// const { execSync } = require("child_process");
 
 // const urls = {
 //   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
