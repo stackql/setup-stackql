@@ -22,16 +22,9 @@ jobs:
 
     - name: Setup stackql
       uses: ./
-      # with:
-      #   use_wrapper: 'true'
-
 
     - name: Validate Stackql Version
       run: |
-        ls -latr /home/runner/work/_temp/
-        tree /home/runner/work/_temp/
-        # which stackql
-        # ls -latr stackql
         stackql --version
 
     - name: Use GitHub Provider
@@ -63,12 +56,12 @@ jobs:
 
     - name: Setup stackql
       uses: ./
-      with:
-        use_wrapper: 'true'
 
-    # - name: Validate Stackql Version
-    #   run: |
-    #     stackql --version
+    - name: Validate Stackql Version
+      run: |
+        ls -latr /home/runner/work/_temp/
+        tree /home/runner/work/_temp/
+        stackql --version
 
     # - name: Use GitHub Provider
     #   run: |
@@ -94,8 +87,6 @@ jobs:
 
     - name: Setup stackql
       uses: ./
-      with:
-        use_wrapper: 'true'
 
     # - name: Validate Stackql Version
     #   run: |
