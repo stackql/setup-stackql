@@ -30,6 +30,8 @@ jobs:
       run: |
         ls -latr /home/runner/work/_temp/
         tree /home/runner/work/_temp/
+        which stackql
+        ls -latr stackql
         stackql --version
 
     - name: Use GitHub Provider
