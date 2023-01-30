@@ -102,7 +102,7 @@ jobs:
         GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
         AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
       run: | ## use the secret to create json file
-        $secrets = (Get-Content env:GOOGLE_CREDS_ENV)
+        $secrets = Get-Content env:GOOGLE_CREDS_ENV
         $decoded = [System.Convert]::FromBase64String($secrets)
         [System.Text.Encoding]::UTF8.GetString($decoded) | Set-Content sa-key.json
         stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
