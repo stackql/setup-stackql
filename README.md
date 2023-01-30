@@ -7,6 +7,8 @@ The `stackql/setup-stackql` action is a JavaScript action that sets up StackQL C
 - Downloading a latest Stackql CLI and adding it to the `PATH`.
 - Setup AUTH env var in the Github Action
 
+This action can be run on `ubuntu-latest`, `windows-latest`, and `macos-latest` GitHub Actions runners, and will install and expose the latest version of the `stackql` CLI on the runner environment.  
+
 # Auth
 [Learn more](https://stackql.io/docs/getting-started/authenticating) about authentication setup when running stackql
 
