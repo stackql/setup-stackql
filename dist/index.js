@@ -6729,7 +6729,7 @@ async function downloadCLI(osPlatform){
         core.info(`extracting mac pkg in ${tmpPath}...`);
         const installPath = '/Users/runner/work/_temp/stackql-pkg';
         execSync(`pkgutil --expand-full ${tmpPath} ${installPath}`);
-        return `${installPath}/Payload/stackql`;
+        return `${installPath}/Payload`;
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(url));
       default:
