@@ -1,4 +1,6 @@
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 const core = require('@actions/core');
 const tc = require('@actions/tool-cache');
 
@@ -83,9 +85,7 @@ async function setup() {
     }
   })();
 
-// const fs = require('fs');
-// const os = require('os');
-// const path = require('path');
+
 // const io = require('@actions/io');
 // const core = require('@actions/core');
 // const tc = require('@actions/tool-cache');

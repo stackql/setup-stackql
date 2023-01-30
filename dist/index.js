@@ -6701,6 +6701,8 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const path = __nccwpck_require__(1017);
+const fs = __nccwpck_require__(7147);
+const os = __nccwpck_require__(2037);
 const core = __nccwpck_require__(8021);
 const tc = __nccwpck_require__(5394);
 
@@ -6785,9 +6787,7 @@ async function setup() {
     }
   })();
 
-// const fs = require('fs');
-// const os = require('os');
-// const path = require('path');
+
 // const io = require('@actions/io');
 // const core = require('@actions/core');
 // const tc = require('@actions/tool-cache');
