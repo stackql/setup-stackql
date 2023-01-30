@@ -19,34 +19,13 @@ async function downloadCLI(osPlatform){
     const url = urls[osPlatform]
     core.debug(`binary location: ${url}`);
 
-    // let pathToCLI = '';
-
     switch (osPlatform) {
       case 'win32':
-        // const pathToWinZip = await tc.downloadTool(url);
-        // return await tc.extractZip(pathToWinZip);
         return await tc.extractZip(await tc.downloadTool(url));
-        
-        // pathToCLI = await tc.extractZip(pathToWinZip);
-        // return pathToCLI;
       case 'darwin':
-        // const pathToMacPkg = await tc.downloadTool(url);
-        // return await tc.extractXar(pathToMacPkg);
         return await tc.extractXar(await tc.downloadTool(url));
-
-        // pathToCLI = await tc.extractXar(pathToMacPkg);
-        // core.debug(`path to cli: ${pathToCLI}`);
-        // fs.chmodSync(pathToCLI, '777');
-        // return pathToCLI;
       case 'linux':
-        // const pathToLinuxZip = await tc.downloadTool(url);
-        // return await tc.extractZip(pathToLinuxZip);
         return await tc.extractZip(await tc.downloadTool(url));
-
-        // pathToCLI = await tc.extractZip(pathToLinuxZip);
-        // core.debug(`path to cli: ${pathToCLI}`);
-        // fs.chmodSync(pathToCLI, '777');
-        // return pathToCLI;
       default:
         throw new Error(`Unsupported platform: ${osPlatform}`);
     }
@@ -57,22 +36,21 @@ async function downloadCLI(osPlatform){
   }
 }
 
-async function makeExecutable(path, osPlatform){
+async function makeExecutable(cliPath, osPlatform){
   try {
     if(osPlatform === 'win32'){
       return;
     } else {
-      core.debug(`making ${path} executable...`);      
-      execSync(`chmod +x ${path}`);
-      // execSync("find ~ -name stackql -exec chmod +x {} \\;");
+      core.debug(`making ${cliPath} executable...`);      
+      execSync(`chmod +x ${cliPath}`);
     }
-    core.debug(`successfully made ${path} executable`);
+    core.debug(`successfully made ${cliPath} executable`);
   } catch (error) {
     core.error(`Error: ${error.message}`);
   }
 }
 
-async function installWrapper(path) {
+async function installWrapper(cliPath) {
   let source, target;
 
   // If we're on Windows, then the executable ends with .exe
@@ -80,8 +58,8 @@ async function installWrapper(path) {
 
   // Rename stackql(.exe) to stackql-bin(.exe)
   try {
-    source = [path, `stackql${exeSuffix}`].join(path.sep);
-    target = [path, `stackql-bin${exeSuffix}`].join(path.sep);
+    source = [cliPath, `stackql${exeSuffix}`].join(path.sep);
+    target = [cliPath, `stackql-bin${exeSuffix}`].join(path.sep);
     core.debug(`Moving ${source} to ${target}.`);
     await io.mv(source, target);
   } catch (e) {
@@ -92,7 +70,7 @@ async function installWrapper(path) {
   // Install our wrapper as stackql by moving the wrapped executable to stackql
   try {
     source = path.resolve([__dirname, '..', 'wrapper', 'dist', 'index.js'].join(path.sep));
-    target = [path, 'stackql'].join(path.sep);
+    target = [cliPath, 'stackql'].join(path.sep);
     core.debug(`Copying ${source} to ${target}.`);
     await io.cp(source, target);
   } catch (e) {
@@ -101,28 +79,36 @@ async function installWrapper(path) {
   }
 
   // Export a new environment variable, so our wrapper can locate the binary
-  core.exportVariable('STACKQL_CLI_PATH', path);
+  core.exportVariable('STACKQL_CLI_PATH', cliPath);
 }
 
 
 async function setup(){
 
   const osPlatform = os.platform();
-  const osArch = os.arch();
   core.debug(`platform: ${osPlatform}`);
+
+  const osArch = os.arch();
   core.debug(`arch: ${osArch}`);
 
-  const path = await downloadCLI(osPlatform)
-  core.debug(`path to cli: ${path}`);
-  fs.chmodSync(path, '777');
-  core.addPath(path)
-  await makeExecutable(path, osPlatform)
+  const cliPath = await downloadCLI(osPlatform)
+  core.debug(`path to cli: ${cliPath}`);
+  
+  core.debug(`updating permissions for ${cliPath}`);
+  fs.chmodSync(cliPath, '777');
+
+  core.debug(`adding ${cliPath} to the path`);
+  core.addPath(cliPath)
+
+  await makeExecutable(cliPath, osPlatform)
+  
   const wrapper = core.getInput('use_wrapper') === 'true';
   if(wrapper){
     core.debug('installing wrapper')
-    await installWrapper(path)
+    await installWrapper(cliPath)
   }
-  core.info(`successfully setup stackql at ${path}`);
+  core.info(`successfully setup stackql at ${cliPath}`);
+
 }
 
 (async () => {
