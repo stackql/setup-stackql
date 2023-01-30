@@ -25,7 +25,7 @@ async function downloadCLI(osPlatform){
         // return await tc.extractXar(await tc.downloadTool(url));
         let pkgFile = await tc.downloadTool(url);
         core.info(`installing mac pkg: ${pkgFile}`);
-        execSync(`sudo installer -pkg ${pkgFile} -target CurrentUserHomeDirectory`);
+        // execSync(`sudo installer -pkg ${pkgFile} -target CurrentUserHomeDirectory`);
         return '/usr/local/bin';
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(url));
