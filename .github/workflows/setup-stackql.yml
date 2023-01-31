@@ -29,17 +29,22 @@ jobs:
 
     - name: Use GitHub Provider
       run: |
-        stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
+        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
       env: 
-        AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        # AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
         STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
+
+    - name: Prep Google Creds (bash)
+      run: | ## use the secret to create json file
+        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+        # stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
 
     - name: Use Google Provider
       run: | ## use the secret to create json file
-        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
-      env:
-        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+        # sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+      # env:
+      #   AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
 
     ##### uncomment the step to see error handling
     # - name: Handle error
@@ -63,17 +68,22 @@ jobs:
 
     - name: Use GitHub Provider
       run: |
-        stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
+        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
       env: 
-        AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        # AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
         STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
+
+    - name: Prep Google Creds (bash)
+      run: | ## use the secret to create json file
+        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+        # stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
 
     - name: Use Google Provider
       run: | ## use the secret to create json file
-        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
-      env:
-        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'    
+        # sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+      # env:
+      #   AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'    
 
   stackql-tests-windows:
     name: 'Stackql Tests (Windows)'
@@ -92,23 +102,23 @@ jobs:
 
     - name: Use GitHub Provider
       run: |
-        stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
+        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
       env: 
-        AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        # AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
         STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
 
-    - name: Prep Google Creds
-      env:
-        GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
-      shell: pwsh
+    - name: Prep Google Creds (Windows)
       run: | ## use the secret to create json file
         $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
         $GoogleCredsDecoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($GoogleCreds))
         Write-Output $GoogleCredsDecoded | Set-Content sa-key.json
+      shell: pwsh
+      env:
+        GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
 
     - name: Use Google Provider
-      env:
-        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
-      shell: pwsh
+      # env:
+      #   AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+      # shell: pwsh
       run: | ## use the secret to create json file
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
