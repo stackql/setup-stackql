@@ -1,0 +1,110 @@
+name: 'Setup StackQL'
+
+on:
+  push:
+    branches:
+    - main
+    - 'develop-**'
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  stackql-tests-linux:
+    name: 'Stackql Tests (Linux)'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup stackql
+      uses: ./
+
+    - name: Validate Stackql Version
+      run: |
+        stackql --version
+
+    - name: Use GitHub Provider
+      run: |
+        stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
+      env: 
+        AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
+
+    - name: Use Google Provider
+      run: | ## use the secret to create json file
+        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
+      env:
+        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+
+    ##### uncomment the step to see error handling
+    # - name: Handle error
+    #   run: | ## use the secret to create json file
+    #     stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
+
+  stackql-tests-mac:
+    name: 'Stackql Tests (MacOS)'
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup stackql
+      uses: ./
+
+    - name: Validate Stackql Version
+      run: |
+        stackql --version
+
+    - name: Use GitHub Provider
+      run: |
+        stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
+      env: 
+        AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
+
+    - name: Use Google Provider
+      run: | ## use the secret to create json file
+        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
+      env:
+        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'    
+
+  stackql-tests-windows:
+    name: 'Stackql Tests (Windows)'
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup stackql
+      uses: ./
+
+    - name: Validate Stackql Version
+      run: |
+        stackql --version
+
+    - name: Use GitHub Provider
+      run: |
+        stackql exec -i ./examples/github-example.iql --auth="${AUTH}"
+      env: 
+        AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
+
+    - name: Use Google Provider
+      env:
+        GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
+        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+      shell: pwsh
+      run: | ## use the secret to create json file
+        $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($GoogleCreds)
+        $base64 = [System.Convert]::ToBase64String($bytes)
+        Write-Output $base64 | Set-Content sa-key.json
+        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
