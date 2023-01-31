@@ -100,19 +100,15 @@ jobs:
     - name: Prep Google Creds
       env:
         GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
-        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
       shell: pwsh
       run: | ## use the secret to create json file
         $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
         $GoogleCredsDecoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($GoogleCreds))
         Write-Output $GoogleCredsDecoded | Set-Content sa-key.json
-        ls sa-key.json
-        cat sa-key.json
 
     - name: Use Google Provider
       env:
-        GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
         AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
       shell: pwsh
       run: | ## use the secret to create json file
-        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
