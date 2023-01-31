@@ -104,9 +104,8 @@ jobs:
       shell: pwsh
       run: | ## use the secret to create json file
         $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
-        $bytes = [System.Text.Encoding]::UTF8.GetBytes($GoogleCreds)
-        $base64 = [System.Convert]::ToBase64String($bytes)
-        Write-Output $base64 | Set-Content sa-key.json
+        $GoogleCredsDecoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($GoogleCreds))
+        Write-Output $GoogleCredsDecoded | Set-Content sa-key.json
         ls sa-key.json
         cat sa-key.json
 
