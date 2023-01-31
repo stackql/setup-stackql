@@ -107,5 +107,5 @@ jobs:
         $bytes = [System.Text.Encoding]::UTF8.GetBytes($GoogleCreds)
         $base64 = [System.Convert]::ToBase64String($bytes)
         Write-Output $base64 | Set-Content sa-key.json
-        Write-Output $GoogleCreds
+        cat sa-key.json
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
