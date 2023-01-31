@@ -97,14 +97,18 @@ jobs:
         AUTH: ${{ vars.AUTH }}  ##'{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
         STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
 
-    - name: Use Google Provider
+    - name: Prep Google Creds
       env:
         GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
-        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
       shell: pwsh
       run: | ## use the secret to create json file
         $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
-        $bytes = [System.Text.Encoding]::UTF8.GetBytes($GoogleCreds)
-        $base64 = [System.Convert]::ToBase64String($bytes)
-        Write-Output $base64 | Set-Content sa-key.json
-        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
+        $GoogleCredsDecoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($GoogleCreds))
+        Write-Output $GoogleCredsDecoded | Set-Content sa-key.json
+
+    - name: Use Google Provider
+      env:
+        AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+      shell: pwsh
+      run: | ## use the secret to create json file
+        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
