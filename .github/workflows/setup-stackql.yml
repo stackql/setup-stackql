@@ -111,4 +111,4 @@ jobs:
         AUTH: ${{ vars.AUTH }}  ## '{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
       shell: pwsh
       run: | ## use the secret to create json file
-        stackql exec -i ./examples/google-example.iql --auth="${AUTH}"
+        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
