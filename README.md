@@ -20,7 +20,7 @@ This action can be run on `ubuntu-latest`, `windows-latest`, and `macos-latest` 
 2. create the github token as a secret
 3. In the execution step, pass the secret as environment variable with name "STACKQL_GITHUB_CREDS"
 
-Check the "Use GitHub Provider" step in `.github/workflows/example-workflows.yml` for the working example
+Check the "Use GitHub Provider" step in `.github/workflows/setup-stackql.yml` for the working example
 
 ### json File Auth example
 
@@ -31,4 +31,4 @@ Check the "Use GitHub Provider" step in `.github/workflows/example-workflows.yml
 2. encode the key json file into base64 string
 3. in execution step, run `sudo echo ${{ secrets.<name of the secret> }} | base64 -d > sa-key.json`
 
-Check the "Use Google Provider" step in `.github/workflows/example-workflows.yml` for the working example
+Check the "Use Google Provider" step in `.github/workflows/setup-stackql.yml` for the working example
