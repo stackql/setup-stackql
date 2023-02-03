@@ -6,6 +6,7 @@ inputs: {}
   #   description: 'Whether or not to install a wrapper to wrap subsequent calls of the `stackql` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.'
   #   default: 'true'
   #   required: false
+
 runs:
   using: 'node16'
   main: 'dist/index.js'

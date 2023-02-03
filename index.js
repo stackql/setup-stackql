@@ -57,7 +57,7 @@ async function setup() {
   try {
 
     // get runner os
-    const osPlatform = os.platform();
+    const osPlatform = os.platform(); 
     core.debug(`platform: ${osPlatform}`);
     const osArch = os.arch();
     core.debug(`arch: ${osArch}`);
