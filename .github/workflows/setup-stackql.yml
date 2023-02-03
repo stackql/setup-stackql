@@ -13,7 +13,7 @@ defaults:
 
 jobs:
   stackql-test-matrix:
-    name: Stackql local run on ${{ matrix.os }}
+    name: Stackql local run on ${{ matrix.os }} ${{ use_wrapper && 'with' || 'without'  }} wrapper
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
