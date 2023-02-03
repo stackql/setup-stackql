@@ -12,10 +12,8 @@ defaults:
     shell: bash
 
 jobs:
-
-
   stackql-test-matrix:
-    name: 'Terraform Run Local No Wrapper'
+    name: Stackql Local Run ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -25,7 +23,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Setup Terraform
+    - name: Setup Stackql
       uses: ./
 
     - name: Validate Stackql Version
