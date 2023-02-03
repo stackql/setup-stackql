@@ -40,7 +40,7 @@ jobs:
         STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
 
     - name: Prep Google Creds (Windows)
-      if: ${{ matrix.os }} == 'windows-latest'
+      if: ${{ matrix.os == 'windows-latest'}}
       run: | ## use the secret to create json file
         $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
         $GoogleCredsDecoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($GoogleCreds))
@@ -50,7 +50,7 @@ jobs:
         GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
   
     - name: Prep Google Creds (bash)
-      if: ${{ matrix.os }} != 'windows-latest'
+      if: ${{ matrix.os != 'windows-latest' }}
       run: | ## use the secret to create json file
         sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
 
