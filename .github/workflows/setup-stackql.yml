@@ -12,78 +12,20 @@ defaults:
     shell: bash
 
 jobs:
-  stackql-tests-linux:
-    name: 'Stackql Tests (Linux)'
-    runs-on: ubuntu-latest
-
+  stackql-test-matrix:
+    name: 'Terraform Run Local No Wrapper'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    defaults:
+      run:
+        working-directory: ./.github/workflows/data/local
     steps:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Setup stackql
-      uses: ./
-
-    - name: Validate Stackql Version
-      run: |
-        stackql --version
-
-    - name: Use GitHub Provider
-      run: |
-        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
-      env: 
-        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
-
-    - name: Prep Google Creds (bash)
-      run: | ## use the secret to create json file
-        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-
-    - name: Use Google Provider
-      run: | 
-        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
-
-    ##### uncomment the step to see error handling
-    # - name: Handle error
-    #   run: | ## use the secret to create json file
-    #     stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
-
-  stackql-tests-mac:
-    name: 'Stackql Tests (MacOS)'
-    runs-on: macos-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Setup stackql
-      uses: ./
-
-    - name: Validate Stackql Version
-      run: |
-        stackql --version
-
-    - name: Use GitHub Provider
-      run: |
-        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
-      env: 
-        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
-
-    - name: Prep Google Creds (bash)
-      run: | ## use the secret to create json file
-        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-
-    - name: Use Google Provider
-      run: | 
-        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
-
-  stackql-tests-windows:
-    name: 'Stackql Tests (Windows)'
-    runs-on: windows-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Setup stackql
+    - name: Setup Terraform
       uses: ./
 
     - name: Validate Stackql Version
@@ -108,20 +50,9 @@ jobs:
     - name: Use Google Provider
       run: | 
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+    
+    ##### uncomment the step to see error handling
+    # - name: Handle error
+    #   run: | ## use the secret to create json file
+    #     stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
 
-
-  stackql-test-matrix:
-    name: 'Terraform Run Local No Wrapper'
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    defaults:
-      run:
-        working-directory: ./.github/workflows/data/local
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Setup Terraform
-      uses: ./
