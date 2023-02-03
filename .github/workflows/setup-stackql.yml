@@ -101,6 +101,6 @@ jobs:
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
     
     #### uncomment the step to see error handling
-    - name: Handle error
-      run: | ## use the secret to create json file
-        stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
+    # - name: Handle error
+    #   run: | ## use the secret to create json file
+    #     stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
