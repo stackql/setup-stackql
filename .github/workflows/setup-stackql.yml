@@ -12,55 +12,13 @@ defaults:
     shell: bash
 
 jobs:
-  stackql-test-matrix-no-wrapper:
+  stackql-test-matrix:
     name: Stackql local run on ${{ matrix.os }} without wrapper
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Setup Stackql
-      uses: ./
-
-    - name: Validate Stackql Version
-      run: |
-        stackql --version
-
-    - name: Use GitHub Provider
-      run: |
-        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
-      env: 
-        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
-
-    - name: Prep Google Creds (Windows)
-      if: ${{ matrix.os }} == 'windows-latest'
-      run: | ## use the secret to create json file
-        $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
-        $GoogleCredsDecoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($GoogleCreds))
-        Write-Output $GoogleCredsDecoded | Set-Content sa-key.json
-      shell: pwsh
-      env:
-        GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
-  
-    - name: Prep Google Creds (bash)
-      if: ${{ matrix.os }} != 'windows-latest'
-      run: | ## use the secret to create json file
-        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-
-    - name: Use Google Provider
-      run: | 
-        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
-
-  stackql-test-matrix-with-wrapper:
-    name: Stackql local run on ${{ matrix.os }} with wrapper
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        use_wrapper: [true, false]
 
     steps:
     - name: Checkout
@@ -69,7 +27,7 @@ jobs:
     - name: Setup Stackql
       uses: ./
       with:
-        use_wrapper: 'true'
+        use_wrapper: ${{matrix.use_wrapper}}
 
     - name: Validate Stackql Version
       run: |
@@ -99,7 +57,7 @@ jobs:
     - name: Use Google Provider
       run: | 
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
-    
+
     #### uncomment the step to see error handling
     # - name: Handle error
     #   run: | ## use the secret to create json file
