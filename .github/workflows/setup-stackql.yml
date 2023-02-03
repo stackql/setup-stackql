@@ -12,15 +12,15 @@ defaults:
     shell: bash
 
 jobs:
+
+
   stackql-test-matrix:
     name: 'Terraform Run Local No Wrapper'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-    defaults:
-      run:
-        working-directory: ./.github/workflows/data/local
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -50,9 +50,8 @@ jobs:
     - name: Use Google Provider
       run: | 
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
-    
+
     ##### uncomment the step to see error handling
     # - name: Handle error
     #   run: | ## use the secret to create json file
     #     stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
-
