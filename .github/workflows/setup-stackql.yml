@@ -13,7 +13,7 @@ defaults:
 
 jobs:
   stackql-test-matrix-no-wrapper:
-    name: Stackql Local Run ${{ matrix.os }}
+    name: Stackql local run on ${{ matrix.os }} without wrapper
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -56,7 +56,7 @@ jobs:
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
 
   stackql-test-matrix-with-wrapper:
-    name: Stackql Local Run ${{ matrix.os }}
+    name: Stackql local run on ${{ matrix.os }} with wrapper
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

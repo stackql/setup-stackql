@@ -4,6 +4,7 @@ const os = require('os');
 const { execSync } = require("child_process");
 const core = require('@actions/core');
 const tc = require('@actions/tool-cache');
+const io = require('@actions/io');
 
 const urls = {
   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',

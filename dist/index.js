@@ -6706,6 +6706,7 @@ const os = __nccwpck_require__(2037);
 const { execSync } = __nccwpck_require__(2081);
 const core = __nccwpck_require__(4695);
 const tc = __nccwpck_require__(3203);
+const io = __nccwpck_require__(9631);
 
 const urls = {
   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
