@@ -6817,7 +6817,7 @@ async function setup() {
 
     if(wrapper){
       core.info('installing wrapper')
-      await installWrapper(path)
+      await installWrapper(cliPath)
     }
     core.info(`successfully setup stackql at ${cliPath}`);
 
