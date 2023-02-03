@@ -6706,6 +6706,7 @@ const os = __nccwpck_require__(2037);
 const { execSync } = __nccwpck_require__(2081);
 const core = __nccwpck_require__(4695);
 const tc = __nccwpck_require__(3203);
+const io = __nccwpck_require__(9631);
 
 const urls = {
   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
@@ -6755,6 +6756,40 @@ async function makeExecutable(cliPath, osPlatform){
   }
 }
 
+
+async function installWrapper (pathToCLI) {
+  let source, target;
+
+  // If we're on Windows, then the executable ends with .exe
+  const exeSuffix = os.platform().startsWith('win') ? '.exe' : '';
+
+  // Rename stackql(.exe) to stackql-bin(.exe)
+  try {
+    source = [pathToCLI, `stackql${exeSuffix}`].join(path.sep);
+    target = [pathToCLI, `stackql-bin${exeSuffix}`].join(path.sep);
+    core.debug(`Moving ${source} to ${target}.`);
+    await io.mv(source, target);
+  } catch (e) {
+    core.debug(`Unable to move ${source} to ${target}.`);
+    throw e;
+  }
+
+  // Install our wrapper as stackql by moving the wrapped executable to stackql
+  try {
+    source = path.resolve([__dirname, '..', 'wrapper', 'dist', 'index.js'].join(path.sep));
+    target = [pathToCLI, 'stackql'].join(path.sep);
+    core.debug(`Copying ${source} to ${target}.`);
+    await io.cp(source, target);
+  } catch (e) {
+    core.error(`Unable to copy ${source} to ${target}.`);
+    throw e;
+  }
+
+  // Export a new environment variable, so our wrapper can locate the binary
+  core.exportVariable('STACKQL_CLI_PATH', pathToCLI);
+}
+
+
 async function setup() {
   try {
 
@@ -6778,6 +6813,12 @@ async function setup() {
 
     await makeExecutable(cliPath, osPlatform)
 
+    const wrapper = core.getInput('use_wrapper') === 'true';
+
+    if(wrapper){
+      core.info('installing wrapper')
+      await installWrapper(cliPath)
+    }
     core.info(`successfully setup stackql at ${cliPath}`);
 
   } catch (e) {
