@@ -31,4 +31,4 @@ Check the "Use GitHub Provider" step in `.github/workflows/setup-stackql.yml` fo
 2. encode the key json file into base64 string
 3. in execution step, run `sudo echo ${{ secrets.<name of the secret> }} | base64 -d > sa-key.json`
 
-Check the "Use Google Provider" step in `.github/workflows/setup-stackql.yml` for the working example
+Check the "Prep Google Creds" step in `.github/workflows/setup-stackql.yml` for the working example
