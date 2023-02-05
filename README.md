@@ -20,7 +20,8 @@ This action can be run on `ubuntu-latest`, `windows-latest`, and `macos-latest` 
 2. create the github token as a secret
 3. In the execution step, pass the secret as environment variable with name "STACKQL_GITHUB_CREDS"
 
-Check the "Use GitHub Provider" step in `.github/workflows/setup-stackql.yml` for the working example
+Check the "Use GitHub Provider" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example
+
 ### Example
 ```
     - name: Use GitHub Provider
@@ -40,7 +41,8 @@ Check the "Use GitHub Provider" step in `.github/workflows/setup-stackql.yml` fo
 2. encode the key json file into base64 string
 3. in execution step, run `sudo echo ${{ secrets.<name of the secret> }} | base64 -d > sa-key.json`
 
-Check the "Prep Google Creds" step in `.github/workflows/setup-stackql.yml` for the working example
+Check the "Prep Google Creds" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example
+
 ### Example
 ```
   - name: Prep Google Creds (bash)
