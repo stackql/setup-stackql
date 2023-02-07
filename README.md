@@ -55,7 +55,7 @@ Check the "Prep Google Creds" step in [setup-stackql.yml](.github/workflows/setu
         stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
 ```
 
-## Input
+## Inputs
 - `use_wrapper` - (optional) Whether to install a wrapper to wrap subsequent calls of
    the `stackql` binary and expose its STDOUT, STDERR, and exit code as outputs
    named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `false`.
