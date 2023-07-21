@@ -1,5 +1,5 @@
-REGISTRY PULL github v23.01.00104;
+REGISTRY PULL github;
 SHOW PROVIDERS;
-select total_private_repos
-from github.orgs.orgs
-where org = 'stackql';
+SELECT *
+FROM github.repos.contributors
+where repo = 'setup-stackql' AND owner = 'stackql';
