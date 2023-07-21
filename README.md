@@ -2,57 +2,47 @@
 
 # setup-stackql
 
-The `stackql/setup-stackql` action is a JavaScript action that sets up StackQL CLI in your GitHub Actions workflow by:
-
-- Downloading a latest Stackql CLI and adding it to the `PATH`.
-- Setup AUTH env var in the Github Action
+The `stackql/setup-stackql` action is a JavaScript action that sets up StackQL CLI in your GitHub Actions workflow by downloading a latest Stackql CLI and adding it to the `PATH`.
 
 This action can be run on `ubuntu-latest`, `windows-latest`, and `macos-latest` GitHub Actions runners, and will install and expose the latest version of the `stackql` CLI on the runner environment.  
 
-# Usage
-[Learn more](https://stackql.io/docs/getting-started/authenticating) about authentication setup when running stackql
+## Usage
+Authentication to StackQL providers is done via environment variables source from GitHub Actions Secrets.  To learn more about authentication, see the setup instructions for your provider or providers at the [StackQL Provider Registry Docs](https://stackql.io/registry).
 
-## Basic Example
-1. Set Auth variable, for example:
-```
-{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }
-```
-2. create the github token as a secret
-3. In the execution step, pass the secret as environment variable with name "STACKQL_GITHUB_CREDS"
+## Examples
+The following example demonstrate the use of the `stackql/setup-stackql` action in a GitHub Actions workflow, demonstrating how to use the action to install the `stackql` CLI and then use it to execute a StackQL query.
 
-Check the "Use GitHub Provider" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example
+### GitHub Example
+Check the "Use GitHub Provider" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example, for more information on the GitHub provider for StackQL, see the [GitHub Provider Docs](https://registry.stackql.io/github).
 
-### Example
-```
+```yaml
+    - name: setup StackQL
+      uses: stackql/setup-stackql@v1.2.0
+      with:
+        use_wrapper: true
+
     - name: Use GitHub Provider
       run: |
-        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        stackql exec -i ./examples/github-example.iql
       env: 
-        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
+        STACKQL_GITHUB_USERNAME: ${{  secrets.STACKQL_GITHUB_USERNAME }}
+        STACKQL_GITHUB_PASSWORD: ${{  secrets.STACKQL_GITHUB_PASSWORD }}
 ```
 
+### Google Example
+Check the "Use Google Provider" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example, for more information on the Google provider for StackQL, see the [Google Provider Docs](https://registry.stackql.io/google).
 
-## json File Auth example
-
-1. Set Auth variable, for example:
-```
-{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}
-```
-2. encode the key json file into base64 string
-3. in execution step, run `sudo echo ${{ secrets.<name of the secret> }} | base64 -d > sa-key.json`
-
-Check the "Prep Google Creds" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example
-
-### Example
-```
-  - name: Prep Google Creds (bash)
-      if: ${{ matrix.os != 'windows-latest' }}
-      run: | ## use the secret to create json file
-        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
+```yaml
+    - name: setup StackQL
+      uses: stackql/setup-stackql@v1.2.0
+      with:
+        use_wrapper: true
 
     - name: Use Google Provider
       run: | 
-        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+        stackql exec -i ./examples/google-example.iql
+      env: 
+        GOOGLE_CREDENTIALS : ${{  secrets.GOOGLE_CREDENTIALS  }}
 ```
 
 ## Inputs

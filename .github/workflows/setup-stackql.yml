@@ -35,31 +35,19 @@ jobs:
 
     - name: Use GitHub Provider
       run: |
-        stackql exec -i ./examples/github-example.iql --auth='{ "github": { "type": "basic", "credentialsenvvar": "STACKQL_GITHUB_CREDS" } }'
+        stackql exec -i ./examples/github-example.iql
       env: 
-        STACKQL_GITHUB_CREDS: ${{  secrets.STACKQL_GITHUB_CREDS }}
-
-    - name: Prep Google Creds (Windows)
-      if: ${{ matrix.os == 'windows-latest'}}
-      run: | ## use the secret to create json file
-        $GoogleCreds = [System.Environment]::GetEnvironmentVariable("GOOGLE_CREDS_ENV")
-        $GoogleCredsDecoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($GoogleCreds))
-        Write-Output $GoogleCredsDecoded | Set-Content sa-key.json
-      shell: pwsh
-      env:
-        GOOGLE_CREDS_ENV: ${{ secrets.GOOGLE_CREDS }}
+        STACKQL_GITHUB_USERNAME: ${{  secrets.STACKQL_GITHUB_USERNAME }}
+        STACKQL_GITHUB_PASSWORD: ${{  secrets.STACKQL_GITHUB_PASSWORD }}
   
-    - name: Prep Google Creds (bash)
-      if: ${{ matrix.os != 'windows-latest' }}
-      run: | ## use the secret to create json file
-        sudo echo ${{ secrets.GOOGLE_CREDS }} | base64 -d > sa-key.json
-
     - name: Use Google Provider
       run: | 
-        stackql exec -i ./examples/google-example.iql --auth='{ "google": { "type": "service_account",  "credentialsfilepath": "sa-key.json" }}'
+        stackql exec -i ./examples/google-example.iql
+      env: 
+        GOOGLE_CREDENTIALS : ${{  secrets.GOOGLE_CREDENTIALS  }}
 
     - name: Handle error
       if: ${{ matrix.use_wrapper}}
       continue-on-error: true
-      run: | ## use the secret to create json file
-        stackql exec -i ./examples/github-example.iql --auth="${INVALID_AUTH}"
+      run: | ## specify a query file that doesnt exist
+        stackql exec -i ./examples/does-not-exist.iql

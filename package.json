@@ -1,6 +1,6 @@
 {
   "name": "setup-stackql",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/stackql/setup-stackql#readme",
   "devDependencies": {
+    "@vercel/ncc": "^0.36.1",
     "husky": "^8.0.3"
   }
 }
