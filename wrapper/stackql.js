@@ -40,7 +40,7 @@ async function checkStackQL () {
   core.setOutput('stdout', stdout.contents);
   core.setOutput('stderr', stderr.contents);
 
-  if ((exitCode === 0 || exitCode === 2) && !stderr.contents) {
+  if (exitCode === 0 || exitCode === 2) {
     // A exitCode of 0 is considered a success
     // An exitCode of 2 may be returned when the '-detailed-exitcode' option
     // is passed to plan. This denotes Success with non-empty
@@ -48,6 +48,7 @@ async function checkStackQL () {
     return;
   }
 
-  // A non-zero exitCode is considered an error
-  core.setFailed(`StackQL exited with error: ${stderr.contents}.`);
+  // If we reach this point, it means that the exitCode was neither 0 nor 2,
+  // which denotes an error. We can still use stderr.contents to provide more information about the error.
+  core.setFailed(`StackQL exited with error code ${exitCode}. Details: ${stderr.contents}.`);
 })();
