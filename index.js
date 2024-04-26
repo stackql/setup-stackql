@@ -8,28 +8,56 @@ const io = require('@actions/io');
 
 const urls = {
   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
-  'darwin': 'https://storage.googleapis.com/stackql-public-releases/latest/stackql_darwin_multiarch.pkg',
+  // 'darwin': 'https://storage.googleapis.com/stackql-public-releases/latest/stackql_darwin_multiarch.pkg',
   'win32': 'https://releases.stackql.io/stackql/latest/stackql_windows_amd64.zip',
 }
+
+// async function downloadCLI(osPlatform){
+//   try {
+
+//     core.info(`downloading stackql binary for ${osPlatform}`);
+//     const url = urls[osPlatform]
+//     core.debug(`binary location: ${url}`);
+
+//     switch (osPlatform) {
+//       case 'win32':
+//         return await tc.extractZip(await tc.downloadTool(url));
+//       case 'darwin':
+//         let tmpPath = await tc.downloadTool(url);
+//         core.info(`extracting mac pkg in ${tmpPath}...`);
+//         const installPath = '/Users/runner/work/_temp/stackql-pkg';
+//         execSync(`pkgutil --expand-full ${tmpPath} ${installPath}`);
+//         return `${installPath}/Payload`;
+//       case 'linux':
+//         return await tc.extractZip(await tc.downloadTool(url));
+//       default:
+//         throw new Error(`Unsupported platform: ${osPlatform}`);
+//     }
+
+//   } catch (error) {
+//     core.error(error);
+//     throw error;
+//   }
+// }
 
 async function downloadCLI(osPlatform){
   try {
 
     core.info(`downloading stackql binary for ${osPlatform}`);
-    const url = urls[osPlatform]
-    core.debug(`binary location: ${url}`);
+    // const url = urls[osPlatform];
+    // core.debug(`binary location: ${url}`);
 
     switch (osPlatform) {
       case 'win32':
-        return await tc.extractZip(await tc.downloadTool(url));
+        return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
       case 'darwin':
-        let tmpPath = await tc.downloadTool(url);
-        core.info(`extracting mac pkg in ${tmpPath}...`);
-        const installPath = '/Users/runner/work/_temp/stackql-pkg';
-        execSync(`pkgutil --expand-full ${tmpPath} ${installPath}`);
-        return `${installPath}/Payload`;
+        core.info(`installing stackql using Homebrew`);
+        execSync('brew install stackql', { stdio: 'inherit' });
+        // Assuming stackql installs to a standard location accessible in the PATH
+        // No need to return a path since brew handles placing it in the PATH
+        return '/usr/local/bin'; // or wherever brew installs binaries
       case 'linux':
-        return await tc.extractZip(await tc.downloadTool(url));
+        return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
       default:
         throw new Error(`Unsupported platform: ${osPlatform}`);
     }
@@ -39,6 +67,7 @@ async function downloadCLI(osPlatform){
     throw error;
   }
 }
+
 
 async function makeExecutable(cliPath, osPlatform){
   try {
