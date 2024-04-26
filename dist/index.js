@@ -6789,34 +6789,30 @@ const urls = {
 //   }
 // }
 
-async function downloadCLI(osPlatform){
+async function downloadCLI(osPlatform) {
   try {
-
-    core.info(`downloading stackql binary for ${osPlatform}`);
-    // const url = urls[osPlatform];
-    // core.debug(`binary location: ${url}`);
+    core.info(`Preparing to download/install stackql for ${osPlatform}`);
 
     switch (osPlatform) {
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
       case 'darwin':
-        core.info(`installing stackql using Homebrew`);
+        core.info(`Installing stackql using Homebrew`);
         execSync('brew install stackql', { stdio: 'inherit' });
-        // Assuming stackql installs to a standard location accessible in the PATH
-        // No need to return a path since brew handles placing it in the PATH
-        return '/usr/local/bin'; // or wherever brew installs binaries
+        // Find the installation path using which
+        const stackqlPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
+        core.debug(`Stackql installed at: ${stackqlPath}`);
+        return path.dirname(stackqlPath); // Return the directory of the binary
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
       default:
         throw new Error(`Unsupported platform: ${osPlatform}`);
     }
-
   } catch (error) {
-    core.error(error);
+    core.error(`Failed to install Stackql: ${error}`);
     throw error;
   }
 }
-
 
 async function makeExecutable(cliPath, osPlatform){
   try {
@@ -6880,13 +6876,13 @@ async function setup() {
     core.debug(`path to cli: ${cliPath}`);
 
     // set perms and make executable
-    core.debug(`updating permissions for ${cliPath}`);
-    fs.chmodSync(cliPath, '777');
-
-    core.debug(`adding ${cliPath} to the path`);
-    core.addPath(cliPath)
-
-    await makeExecutable(cliPath, osPlatform)
+    if(osPlatform != 'darwin'){
+      core.debug(`updating permissions for ${cliPath}`);
+      fs.chmodSync(cliPath, '777');
+      core.debug(`adding ${cliPath} to the path`);
+      core.addPath(cliPath)
+      await makeExecutable(cliPath, osPlatform)
+    }
 
     const wrapper = core.getInput('use_wrapper') === 'true';
 
