@@ -6757,37 +6757,8 @@ const io = __nccwpck_require__(9234);
 
 const urls = {
   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
-  // 'darwin': 'https://storage.googleapis.com/stackql-public-releases/latest/stackql_darwin_multiarch.pkg',
   'win32': 'https://releases.stackql.io/stackql/latest/stackql_windows_amd64.zip',
 }
-
-// async function downloadCLI(osPlatform){
-//   try {
-
-//     core.info(`downloading stackql binary for ${osPlatform}`);
-//     const url = urls[osPlatform]
-//     core.debug(`binary location: ${url}`);
-
-//     switch (osPlatform) {
-//       case 'win32':
-//         return await tc.extractZip(await tc.downloadTool(url));
-//       case 'darwin':
-//         let tmpPath = await tc.downloadTool(url);
-//         core.info(`extracting mac pkg in ${tmpPath}...`);
-//         const installPath = '/Users/runner/work/_temp/stackql-pkg';
-//         execSync(`pkgutil --expand-full ${tmpPath} ${installPath}`);
-//         return `${installPath}/Payload`;
-//       case 'linux':
-//         return await tc.extractZip(await tc.downloadTool(url));
-//       default:
-//         throw new Error(`Unsupported platform: ${osPlatform}`);
-//     }
-
-//   } catch (error) {
-//     core.error(error);
-//     throw error;
-//   }
-// }
 
 async function downloadCLI(osPlatform) {
   try {
