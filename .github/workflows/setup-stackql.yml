@@ -43,7 +43,7 @@ jobs:
         echo "Version output: $VERSION_OUTPUT"
 
         SEMVER_REGEX="v[0-9]+\.[0-9]+\.[0-9]+"
-        PLATFORM_REGEX="(Linux|Darwin|Windows)"
+        PLATFORM_REGEX="(Linux|Darwin|Windows|Homebrew)"
         # DATE_REGEX="BuildDate: \b\d{4}-\d{2}-\d{2}\b"
         # SHA_REGEX="\([0-9a-f]{7}\)"
 
