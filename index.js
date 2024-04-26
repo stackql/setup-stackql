@@ -83,7 +83,6 @@ async function makeExecutable(cliPath, osPlatform){
   }
 }
 
-
 async function installWrapper (pathToCLI) {
   let source, target;
 
