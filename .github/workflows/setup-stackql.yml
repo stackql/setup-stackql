@@ -32,21 +32,21 @@ jobs:
     - name: Get Stackql Version
       id: get-stackql-version
       run: |
-        echo "::set-output name=stackql_version::$(stackql --version)"
+        echo "stackql_version<<EOF" >> $GITHUB_ENV
+        stackql --version >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
 
     - name: Validate Stackql Version
       run: |
-        # Retrieve the output from the previous step
-        VERSION_OUTPUT="${{ steps.get-stackql-version.outputs.stackql_version }}"
+        # Extract only the relevant line containing version information
+        VERSION_OUTPUT=$(echo "${{ env.stackql_version }}" | grep -E 'stackql v[0-9]+\.[0-9]+\.[0-9]+')
         echo "Version output: $VERSION_OUTPUT"
 
-        # Regex patterns to validate different parts
         SEMVER_REGEX="v[0-9]+\.[0-9]+\.[0-9]+"
         PLATFORM_REGEX="(Linux|Darwin|Windows)"
-        # DATE_REGEX="\b\d{4}-\d{2}-\d{2}\b"
-        # SHA_REGEX="\([0-9a-f]{7}\)"
+        DATE_REGEX="BuildDate: \b\d{4}-\d{2}-\d{2}\b"
+        SHA_REGEX="\([0-9a-f]{7}\)"
 
-        # Perform validation
         if ! [[ "$VERSION_OUTPUT" =~ $SEMVER_REGEX ]]; then
           echo "Semantic version does not match expected format"
           exit 1
@@ -55,16 +55,17 @@ jobs:
           echo "Platform information does not match expected formats"
           exit 1
         fi
-        # if ! [[ "$VERSION_OUTPUT" =~ $DATE_REGEX ]]; then
-        #   echo "Build date does not match expected format"
-        #   exit 1
-        # fi
-        # if ! [[ "$VERSION_OUTPUT" =~ $SHA_REGEX ]]; then
-        #   echo "Commit SHA does not match expected format"
-        #   exit 1
-        # fi
+        if ! [[ "$VERSION_OUTPUT" =~ $DATE_REGEX ]]; then
+          echo "Build date does not match expected format"
+          exit 1
+        fi
+        if ! [[ "$VERSION_OUTPUT" =~ $SHA_REGEX ]]; then
+          echo "Commit SHA does not match expected format"
+          exit 1
+        fi
 
-        echo "stackql --version output validated successfully."
+        echo "All components of the version output are validated successfully."
+
 
 
 
