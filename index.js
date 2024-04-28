@@ -18,13 +18,21 @@ async function downloadCLI(osPlatform) {
     switch (osPlatform) {
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
-      case 'darwin':
-        core.info(`Installing stackql using Homebrew`);
-        execSync('brew install stackql', { stdio: 'inherit' });
-        // Find the installation path using which
-        const stackqlPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
-        core.debug(`Stackql installed at: ${stackqlPath}`);
-        return path.dirname(stackqlPath); // Return the directory of the binary
+        case 'darwin':
+          // Check if stackql is already installed and skip if it is
+          core.info(`Checking if stackql is already installed`);
+          const isInstalled = execSync('brew list stackql', { stdio: 'pipe', encoding: 'utf-8' });
+          if (isInstalled.includes('stackql')) {
+            core.info(`stackql is already installed.`);
+            const stackqlPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
+            core.debug(`Stackql is located at: ${stackqlPath}`);
+            return path.dirname(stackqlPath); // Return the directory of the binary
+          }
+          core.info(`Installing stackql using Homebrew`);
+          execSync('brew install stackql', { stdio: 'inherit' });
+          const installedPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
+          core.debug(`Stackql installed at: ${installedPath}`);
+          return path.dirname(installedPath); // Return the directory of the binary
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
       default:

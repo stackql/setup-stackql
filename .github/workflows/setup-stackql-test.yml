@@ -1,4 +1,4 @@
-name: 'setup stackql'
+name: 'setup stackql test'
 
 on:
   push:
