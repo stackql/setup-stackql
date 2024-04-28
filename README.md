@@ -17,7 +17,7 @@ Check the "Use GitHub Provider" step in [setup-stackql.yml](.github/workflows/se
 
 ```yaml
     - name: setup StackQL
-      uses: stackql/setup-stackql@v2.1.0
+      uses: stackql/setup-stackql@v2.2.0
       with:
         use_wrapper: true
 
@@ -34,7 +34,7 @@ Check the "Use Google Provider" step in [setup-stackql.yml](.github/workflows/se
 
 ```yaml
     - name: setup StackQL
-      uses: stackql/setup-stackql@v2.1.0
+      uses: stackql/setup-stackql@v2.2.0
       with:
         use_wrapper: true
 
