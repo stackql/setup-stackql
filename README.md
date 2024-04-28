@@ -1,4 +1,4 @@
-[![Setup StackQL](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql.yml/badge.svg)](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql.yml)  
+[![Setup StackQL](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml/badge.svg)](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml)  
 
 # setup-stackql
 
