@@ -1,4 +1,4 @@
-[![Setup StackQL](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql.yml/badge.svg)](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql.yml)  
+[![Setup StackQL](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml/badge.svg)](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml)  
 
 # setup-stackql
 
@@ -13,7 +13,7 @@ Authentication to StackQL providers is done via environment variables source fro
 The following example demonstrate the use of the `stackql/setup-stackql` action in a GitHub Actions workflow, demonstrating how to use the action to install the `stackql` CLI and then use it to execute a StackQL query.
 
 ### GitHub Example
-Check the "Use GitHub Provider" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example, for more information on the GitHub provider for StackQL, see the [GitHub Provider Docs](https://registry.stackql.io/github).
+Check the "Use GitHub Provider" step in [setup-stackql-test.yml](.github/workflows/setup-stackql-test.yml) for the working example, for more information on the GitHub provider for StackQL, see the [GitHub Provider Docs](https://registry.stackql.io/github).
 
 ```yaml
     - name: setup StackQL
@@ -30,7 +30,7 @@ Check the "Use GitHub Provider" step in [setup-stackql.yml](.github/workflows/se
 ```
 
 ### Google Example
-Check the "Use Google Provider" step in [setup-stackql.yml](.github/workflows/setup-stackql.yml) for the working example, for more information on the Google provider for StackQL, see the [Google Provider Docs](https://registry.stackql.io/google).
+Check the "Use Google Provider" step in [setup-stackql-test.yml](.github/workflows/setup-stackql-test.yml) for the working example, for more information on the Google provider for StackQL, see the [Google Provider Docs](https://registry.stackql.io/google).
 
 ```yaml
     - name: setup StackQL
@@ -46,7 +46,7 @@ Check the "Use Google Provider" step in [setup-stackql.yml](.github/workflows/se
 ```
 
 ## Inputs
-- `use_wrapper` - (optional) Whether to install a wrapper to wrap subsequent calls of
+- __`use_wrapper`__ - (optional) Whether to install a wrapper to wrap subsequent calls of
    the `stackql` binary and expose its STDOUT, STDERR, and exit code as outputs
    named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `false`.
 
@@ -54,6 +54,6 @@ Check the "Use Google Provider" step in [setup-stackql.yml](.github/workflows/se
 This action does not configure any outputs directly. However, when you set the `use_wrapper` input
 to `true`, the following outputs are available for subsequent steps that call the `stackql` binary:
 
-- `stdout` - The STDOUT stream of the call to the `stackql` binary.
-- `stderr` - The STDERR stream of the call to the `stackql` binary.
-- `exitcode` - The exit code of the call to the `stackql` binary.
+- __`stdout`__ - The STDOUT stream of the call to the `stackql` binary.
+- __`stderr`__ - The STDERR stream of the call to the `stackql` binary.
+- __`exitcode`__ - The exit code of the call to the `stackql` binary.
