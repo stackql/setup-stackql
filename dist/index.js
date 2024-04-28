@@ -6768,20 +6768,22 @@ async function downloadCLI(osPlatform) {
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
         case 'darwin':
-          // Use brew info --json to check if stackql is installed
+          // Check if stackql is already installed using brew list --formula
           core.info(`Checking if stackql is already installed`);
           try {
-            const brewInfo = execSync('brew info stackql --json', { encoding: 'utf-8' });
-            const brewInfoJson = JSON.parse(brewInfo);
-            if (brewInfoJson[0].installed.length > 0) {
+            const installedFormulas = execSync('brew list --formula', { encoding: 'utf-8' });
+            if (installedFormulas.includes('stackql')) {
               core.info(`stackql is already installed.`);
               const stackqlPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
               core.debug(`Stackql is located at: ${stackqlPath}`);
               return path.dirname(stackqlPath); // Return the directory of the binary
+            } else {
+              core.info(`Installing stackql using Homebrew`);
+              execSync('brew install stackql', { stdio: 'inherit' });
             }
           } catch (error) {
-            core.info(`stackql is not installed, installing now...`);
-            execSync('brew install stackql', { stdio: 'inherit' });
+            core.info(`Error checking/installing stackql: ${error}`);
+            throw new Error(`Error checking/installing stackql: ${error}`);
           }
           const installedPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
           core.debug(`Stackql installed at: ${installedPath}`);
