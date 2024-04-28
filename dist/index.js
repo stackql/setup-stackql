@@ -6762,39 +6762,39 @@ const urls = {
 
 async function downloadCLI(osPlatform) {
   try {
-    core.info(`Preparing to download/install stackql for ${osPlatform}`);
+    core.info(`preparing to download/install stackql for ${osPlatform}`);
 
     switch (osPlatform) {
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
         case 'darwin':
           // Check if stackql is already installed using brew list --formula
-          core.info(`Checking if stackql is already installed`);
+          core.info(`checking if stackql is already installed...`);
           try {
             const installedFormulas = execSync('brew list --formula', { encoding: 'utf-8' });
             if (installedFormulas.includes('stackql')) {
               core.info(`stackql is already installed.`);
               const stackqlPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
-              core.debug(`Stackql is located at: ${stackqlPath}`);
+              core.debug(`stackql is located at: ${stackqlPath}`);
               return path.dirname(stackqlPath); // Return the directory of the binary
             } else {
-              core.info(`Installing stackql using Homebrew`);
+              core.info(`installing stackql using Homebrew...`);
               execSync('brew install stackql', { stdio: 'inherit' });
             }
           } catch (error) {
-            core.info(`Error checking/installing stackql: ${error}`);
-            throw new Error(`Error checking/installing stackql: ${error}`);
+            core.info(`error checking/installing stackql: ${error}`);
+            throw new Error(`error checking/installing stackql: ${error}`);
           }
           const installedPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
-          core.debug(`Stackql installed at: ${installedPath}`);
+          core.debug(`stackql installed at: ${installedPath}`);
           return path.dirname(installedPath); // Return the directory of the binary
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
       default:
-        throw new Error(`Unsupported platform: ${osPlatform}`);
+        throw new Error(`unsupported platform: ${osPlatform}`);
     }
   } catch (error) {
-    core.error(`Failed to install Stackql: ${error}`);
+    core.error(`failed to install stackql: ${error}`);
     throw error;
   }
 }
@@ -6823,10 +6823,10 @@ async function installWrapper (pathToCLI) {
   try {
     source = [pathToCLI, `stackql${exeSuffix}`].join(path.sep);
     target = [pathToCLI, `stackql-bin${exeSuffix}`].join(path.sep);
-    core.debug(`Moving ${source} to ${target}.`);
+    core.debug(`moving ${source} to ${target}...`);
     await io.mv(source, target);
   } catch (e) {
-    core.debug(`Unable to move ${source} to ${target}.`);
+    core.debug(`unable to move ${source} to ${target}.`);
     throw e;
   }
 
@@ -6834,10 +6834,10 @@ async function installWrapper (pathToCLI) {
   try {
     source = path.resolve([__dirname, '..', 'wrapper', 'dist', 'index.js'].join(path.sep));
     target = [pathToCLI, 'stackql'].join(path.sep);
-    core.debug(`Copying ${source} to ${target}.`);
+    core.debug(`copying ${source} to ${target}...`);
     await io.cp(source, target);
   } catch (e) {
-    core.error(`Unable to copy ${source} to ${target}.`);
+    core.error(`unable to copy ${source} to ${target}.`);
     throw e;
   }
 
@@ -6862,9 +6862,9 @@ async function setup() {
 
     // set perms and make executable
     if(osPlatform != 'darwin'){
-      core.debug(`updating permissions for ${cliPath}`);
+      core.debug(`updating permissions for ${cliPath}...`);
       fs.chmodSync(cliPath, '777');
-      core.debug(`adding ${cliPath} to the path`);
+      core.debug(`adding ${cliPath} to the path...`);
       core.addPath(cliPath)
       await makeExecutable(cliPath, osPlatform)
     }
@@ -6872,7 +6872,7 @@ async function setup() {
     const wrapper = core.getInput('use_wrapper') === 'true';
 
     if(wrapper){
-      core.info('installing wrapper')
+      core.info('installing wrapper...')
       await installWrapper(cliPath)
     }
     core.info(`successfully setup stackql at ${cliPath}`);
