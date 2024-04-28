@@ -112,7 +112,7 @@ async function setup() {
     core.debug(`path to cli: ${cliPath}`);
 
     // set perms and make executable
-    if(osPlatform != 'darwin'){
+    if(osPlatform !== 'darwin'){
       core.debug(`updating permissions for ${cliPath}...`);
       fs.chmodSync(cliPath, '777');
       core.debug(`adding ${cliPath} to the path...`);
@@ -120,11 +120,11 @@ async function setup() {
       await makeExecutable(cliPath, osPlatform)
     }
 
-    const wrapper = core.getInput('use_wrapper') === 'true';
-
-    if(wrapper){
-      core.info('installing wrapper...')
-      await installWrapper(cliPath)
+    // Check if wrapper is needed and if it's not Darwin
+    const useWrapper = core.getInput('use_wrapper') === 'true';
+    if(useWrapper && osPlatform !== 'darwin'){
+      core.info('installing wrapper...');
+      await installWrapper(cliPath);
     }
     core.info(`successfully setup stackql at ${cliPath}`);
 
