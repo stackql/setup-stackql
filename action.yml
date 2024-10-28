@@ -1,4 +1,4 @@
-name: 'StackQL Studios - Setup StackQL'
+name: 'setup-stackql'
 description: 'Sets up the StackQL CLI in your GitHub Actions workflow.'
 author: 'Yuncheng Yang, Jeffrey Aven'
 inputs:
@@ -13,4 +13,4 @@ runs:
 
 branding:
   icon: 'terminal'
-  color: 'green'
+  color: 'blue'
