@@ -29,29 +29,12 @@ jobs:
       with:
         use_wrapper: ${{matrix.use_wrapper}}
 
-    - name: Get Stackql Version
-      id: get-stackql-version
+    - name: Run Registry List and Validate
       run: |
-        echo "stackql_version<<EOF" >> $GITHUB_ENV
-        stackql --version >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
+        OUTPUT=$(stackql exec --output json "REGISTRY LIST")
+        echo "Registry list output:"
+        echo "$OUTPUT"
 
-    - name: Validate Stackql Version
-      run: |
-        # Extract only the relevant line containing version information
-        VERSION_OUTPUT=$(echo "${{ env.stackql_version }}" | grep -E 'stackql v[0-9]+\.[0-9]+\.[0-9]+')
-        echo "Version output: $VERSION_OUTPUT"
-
-        SEMVER_REGEX="v[0-9]+\.[0-9]+\.[0-9]+"
-        PLATFORM_REGEX="(Linux|Darwin|Windows|Homebrew)"
-
-        if ! [[ "$VERSION_OUTPUT" =~ $SEMVER_REGEX ]]; then
-          echo "Semantic version does not match expected format"
-          exit 1
-        fi
-        if ! [[ "$VERSION_OUTPUT" =~ $PLATFORM_REGEX ]]; then
-          echo "Platform information does not match expected formats"
-          exit 1
-        fi
-
-        echo "version output validated successfully."
+        # Validate JSON structure: array of objects each with provider and version keys
+        echo "$OUTPUT" | jq -e 'type == "array" and (all(.[]; has("provider") and has("version")))' > /dev/null
+        echo "Registry list validated successfully."
