@@ -118,6 +118,13 @@ async function setup () {
       await makeExecutable(cliPath, osPlatform);
     }
 
+    // Print stackql version to action logs
+    const exeSuffix = osPlatform === 'win32' ? '.exe' : '';
+    const stackqlBin = path.join(cliPath, `stackql${exeSuffix}`);
+    core.info('stackql version:');
+    const versionOutput = execSync(`"${stackqlBin}" --version`, { encoding: 'utf-8' });
+    core.info(versionOutput.trim());
+
     // Check if wrapper is needed and if it's not Darwin
     const useWrapper = core.getInput('use_wrapper') === 'true';
     if (useWrapper && osPlatform !== 'darwin') {
