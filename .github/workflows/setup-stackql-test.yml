@@ -35,6 +35,12 @@ jobs:
         echo "Registry list output:"
         echo "$OUTPUT"
 
+        # When the wrapper is active, @actions/exec writes stackql's stdout directly to the
+        # wrapper process's stdout, and core.debug() appends ::debug:: annotations immediately
+        # after (on the same line, since the JSON has no trailing newline). Strip all GitHub
+        # Actions workflow commands (::name::value) before handing the output to jq.
+        CLEAN_JSON=$(echo "$OUTPUT" | sed 's/::[a-z-]*::.*$//' | grep -v '^[[:space:]]*$')
+
         # Validate JSON structure: array of objects each with provider and version keys
-        echo "$OUTPUT" | jq -e 'type == "array" and (all(.[]; has("provider") and has("version")))' > /dev/null
+        echo "$CLEAN_JSON" | jq -e 'type == "array" and (all(.[]; has("provider") and has("version")))' > /dev/null
         echo "Registry list validated successfully."
