@@ -13,7 +13,7 @@ Authentication to StackQL providers is done via environment variables source fro
 The following example demonstrate the use of the `stackql/setup-stackql` action in a GitHub Actions workflow, demonstrating how to use the action to install the `stackql` CLI and then use it to execute a StackQL query.
 
 ### GitHub Example
-Check the "Use GitHub Provider" step in [setup-stackql-test.yml](.github/workflows/setup-stackql-test.yml) for the working example, for more information on the GitHub provider for StackQL, see the [GitHub Provider Docs](https://registry.stackql.io/github).
+Check the "Use GitHub Provider" step in [setup-stackql-test.yml](.github/workflows/setup-stackql-test.yml) for the working example, for more information on the GitHub provider for StackQL, see the [GitHub Provider Docs](https://github-provider.stackql.io/).
 
 ```yaml
     - name: setup StackQL
@@ -30,7 +30,7 @@ Check the "Use GitHub Provider" step in [setup-stackql-test.yml](.github/workflo
 ```
 
 ### Google Example
-Check the "Use Google Provider" step in [setup-stackql-test.yml](.github/workflows/setup-stackql-test.yml) for the working example, for more information on the Google provider for StackQL, see the [Google Provider Docs](https://registry.stackql.io/google).
+Check the "Use Google Provider" step in [setup-stackql-test.yml](.github/workflows/setup-stackql-test.yml) for the working example, for more information on the Google provider for StackQL, see the [Google Provider Docs](https://google-provider.stackql.io/).
 
 ```yaml
     - name: setup StackQL
