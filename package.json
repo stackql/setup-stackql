@@ -2,10 +2,11 @@
   "name": "setup-stackql",
   "version": "2.2.1",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "cd wrapper && npm run build && cd .. && ncc build index.js --out dist",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -15,17 +16,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1",
-    "@actions/io": "^1.1.2",
-    "@actions/tool-cache": "^2.0.1"
+    "@actions/core": "^3.0.0",
+    "@actions/github": "^9.0.0",
+    "@actions/io": "^3.0.2",
+    "@actions/tool-cache": "^4.0.0"
   },
   "bugs": {
     "url": "https://github.com/stackql/setup-stackql/issues"
   },
   "homepage": "https://github.com/stackql/setup-stackql#readme",
   "devDependencies": {
-    "@vercel/ncc": "^0.36.1",
-    "husky": "^8.0.3"
+    "@vercel/ncc": "^0.38.4",
+    "husky": "^9.1.7"
   }
 }

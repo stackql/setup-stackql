@@ -15,23 +15,22 @@
  * console.log(listener.contents);
  */
 class OutputListener {
-    constructor () {
-      this._buff = [];
-    }
-  
-    get listener () {
-      const listen = function listen (data) {
-        this._buff.push(data);
-      };
-      return listen.bind(this);
-    }
-  
-    get contents () {
-      return this._buff
-        .map(chunk => chunk.toString())
-        .join('');
-    }
+  constructor () {
+    this._buff = [];
   }
-  
-  module.exports = OutputListener;
-  
+
+  get listener () {
+    const listen = function listen (data) {
+      this._buff.push(data);
+    };
+    return listen.bind(this);
+  }
+
+  get contents () {
+    return this._buff
+      .map(chunk => chunk.toString())
+      .join('');
+  }
+}
+
+export default OutputListener;

@@ -1,44 +1,44 @@
-const path = require('path');
-const fs = require('fs');
-const os = require('os');
-const { execSync } = require("child_process");
-const core = require('@actions/core');
-const tc = require('@actions/tool-cache');
-const io = require('@actions/io');
+import path from 'path';
+import fs from 'fs';
+import os from 'os';
+import { execSync } from 'child_process';
+import * as core from '@actions/core';
+import * as tc from '@actions/tool-cache';
+import * as io from '@actions/io';
 
 const urls = {
   'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
   'win32': 'https://releases.stackql.io/stackql/latest/stackql_windows_amd64.zip',
-}
+};
 
-async function downloadCLI(osPlatform) {
+async function downloadCLI (osPlatform) {
   try {
     core.info(`preparing to download/install stackql for ${osPlatform}`);
 
     switch (osPlatform) {
       case 'win32':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
-        case 'darwin':
-          // Check if stackql is already installed using brew list --formula
-          core.info(`checking if stackql is already installed...`);
-          try {
-            const installedFormulas = execSync('brew list --formula', { encoding: 'utf-8' });
-            if (installedFormulas.includes('stackql')) {
-              core.info(`stackql is already installed.`);
-              const stackqlPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
-              core.debug(`stackql is located at: ${stackqlPath}`);
-              return path.dirname(stackqlPath); // Return the directory of the binary
-            } else {
-              core.info(`installing stackql using Homebrew...`);
-              execSync('brew install stackql', { stdio: 'inherit' });
-            }
-          } catch (error) {
-            core.info(`error checking/installing stackql: ${error}`);
-            throw new Error(`error checking/installing stackql: ${error}`);
+      case 'darwin':
+        // Check if stackql is already installed using brew list --formula
+        core.info(`checking if stackql is already installed...`);
+        try {
+          const installedFormulas = execSync('brew list --formula', { encoding: 'utf-8' });
+          if (installedFormulas.includes('stackql')) {
+            core.info(`stackql is already installed.`);
+            const stackqlPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
+            core.debug(`stackql is located at: ${stackqlPath}`);
+            return path.dirname(stackqlPath);
+          } else {
+            core.info(`installing stackql using Homebrew...`);
+            execSync('brew install stackql', { stdio: 'inherit' });
           }
-          const installedPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
-          core.debug(`stackql installed at: ${installedPath}`);
-          return path.dirname(installedPath); // Return the directory of the binary
+        } catch (error) {
+          core.info(`error checking/installing stackql: ${error}`);
+          throw new Error(`error checking/installing stackql: ${error}`);
+        }
+        const installedPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
+        core.debug(`stackql installed at: ${installedPath}`);
+        return path.dirname(installedPath);
       case 'linux':
         return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
       default:
@@ -50,12 +50,12 @@ async function downloadCLI(osPlatform) {
   }
 }
 
-async function makeExecutable(cliPath, osPlatform){
+async function makeExecutable (cliPath, osPlatform) {
   try {
-    if(osPlatform === 'win32'){
+    if (osPlatform === 'win32') {
       return;
     } else {
-      core.debug(`making ${cliPath} executable...`);      
+      core.debug(`making ${cliPath} executable...`);
       execSync(`chmod +x ${cliPath}/stackql`);
     }
     core.debug(`successfully made ${cliPath} executable`);
@@ -83,7 +83,7 @@ async function installWrapper (pathToCLI) {
 
   // Install our wrapper as stackql by moving the wrapped executable to stackql
   try {
-    source = path.resolve([__dirname, '..', 'wrapper', 'dist', 'index.js'].join(path.sep));
+    source = path.resolve([import.meta.dirname, '..', 'wrapper', 'dist', 'index.js'].join(path.sep));
     target = [pathToCLI, 'stackql'].join(path.sep);
     core.debug(`copying ${source} to ${target}...`);
     await io.cp(source, target);
@@ -96,47 +96,44 @@ async function installWrapper (pathToCLI) {
   core.exportVariable('STACKQL_CLI_PATH', pathToCLI);
 }
 
-
-async function setup() {
+async function setup () {
   try {
-
     // get runner os
-    const osPlatform = os.platform(); 
+    const osPlatform = os.platform();
     core.debug(`platform: ${osPlatform}`);
     const osArch = os.arch();
     core.debug(`arch: ${osArch}`);
 
     // download and extract stackql binary
-    const cliPath = await downloadCLI(osPlatform)
-    
+    const cliPath = await downloadCLI(osPlatform);
+
     core.debug(`path to cli: ${cliPath}`);
 
     // set perms and make executable
-    if(osPlatform !== 'darwin'){
+    if (osPlatform !== 'darwin') {
       core.debug(`updating permissions for ${cliPath}...`);
       fs.chmodSync(cliPath, '777');
       core.debug(`adding ${cliPath} to the path...`);
-      core.addPath(cliPath)
-      await makeExecutable(cliPath, osPlatform)
+      core.addPath(cliPath);
+      await makeExecutable(cliPath, osPlatform);
     }
 
     // Check if wrapper is needed and if it's not Darwin
     const useWrapper = core.getInput('use_wrapper') === 'true';
-    if(useWrapper && osPlatform !== 'darwin'){
+    if (useWrapper && osPlatform !== 'darwin') {
       core.info('installing wrapper...');
       await installWrapper(cliPath);
     }
     core.info(`successfully setup stackql at ${cliPath}`);
-
   } catch (e) {
     core.setFailed(e);
   }
 }
 
 (async () => {
-    try {
-      await setup();
-    } catch (error) {
-      core.setFailed(error.message);
-    }
-  })();
+  try {
+    await setup();
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+})();
