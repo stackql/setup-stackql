@@ -39,19 +39,19 @@ jobs:
     - name: Validate Registry List
       run: |
         echo "Registry list output:"
-        echo "${{ env.registry_list_output }}"
+        echo "$registry_list_output"
 
         # Validate header row: expect | provider | and | version | columns
         # Use [[:space:]] instead of \s for macOS bash 3.2 compatibility
         HEADER_REGEX='\|[[:space:]]*provider[[:space:]]*\|[[:space:]]*version[[:space:]]*\|'
-        if ! [[ "${{ env.registry_list_output }}" =~ $HEADER_REGEX ]]; then
+        if ! [[ "$registry_list_output" =~ $HEADER_REGEX ]]; then
           echo "Registry list header does not match expected format"
           exit 1
         fi
 
         # Validate at least one data row: | <name> | v<major>.<minor>.<patch> |
         DATA_ROW_REGEX='\|[[:space:]]*[a-z][a-z0-9_]*[[:space:]]*\|[[:space:]]*v[0-9]+\.[0-9]+\.[0-9]+[[:space:]]*\|'
-        if ! [[ "${{ env.registry_list_output }}" =~ $DATA_ROW_REGEX ]]; then
+        if ! [[ "$registry_list_output" =~ $DATA_ROW_REGEX ]]; then
           echo "Registry list does not contain a valid data row"
           exit 1
         fi
