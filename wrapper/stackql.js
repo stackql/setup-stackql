@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-const io = require('@actions/io');
-const core = require('@actions/core');
-const { exec } = require('@actions/exec');
+import * as io from '@actions/io';
+import * as core from '@actions/core';
+import { exec } from '@actions/exec';
 
-const OutputListener = require('./lib/output-listener');
-const pathToCLI = require('./lib/stackql-bin');
+import OutputListener from './lib/output-listener.js';
+import pathToCLI from './lib/stackql-bin.js';
 
 async function checkStackQL () {
   // Setting check to `true` will cause `which` to throw if stackql isn't found
