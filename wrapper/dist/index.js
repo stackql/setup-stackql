@@ -30975,7 +30975,7 @@ async function checkStackQL () {
     listeners,
     ignoreReturnCode: true
   };
-  const exitCode = await exec_exec(stackql_bin, args, options);
+  const exitCode = await exec_exec(`"${stackql_bin}"`, args, options);
   core_debug(`StackQL exited with code ${exitCode}.`);
   core_debug(`stdout: ${stdout.contents}`);
   core_debug(`stderr: ${stderr.contents}`);

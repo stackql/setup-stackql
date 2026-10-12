@@ -7,17 +7,35 @@ import * as tc from '@actions/tool-cache';
 import * as io from '@actions/io';
 
 const urls = {
-  'linux': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
-  'win32': 'https://releases.stackql.io/stackql/latest/stackql_windows_amd64.zip',
+  'linux': {
+    'x64': 'https://releases.stackql.io/stackql/latest/stackql_linux_amd64.zip',
+    'arm64': 'https://releases.stackql.io/stackql/latest/stackql_linux_arm64.zip',
+  },
+  'win32': {
+    'x64': 'https://releases.stackql.io/stackql/latest/stackql_windows_amd64.zip',
+    'arm64': 'https://releases.stackql.io/stackql/latest/stackql_windows_arm64.zip',
+  },
 };
 
-async function downloadCLI (osPlatform) {
+async function downloadCLI (osPlatform, osArch) {
   try {
-    core.info(`preparing to download/install stackql for ${osPlatform}`);
+    core.info(`preparing to download/install stackql for ${osPlatform}/${osArch}`);
+
+    if (!['linux', 'win32', 'darwin'].includes(osPlatform)) {
+      throw new Error(`unsupported platform: ${osPlatform}`);
+    }
+    if (!['x64', 'arm64'].includes(osArch)) {
+      throw new Error(`unsupported architecture: ${osPlatform}/${osArch}`);
+    }
 
     switch (osPlatform) {
-      case 'win32':
-        return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
+      case 'linux':
+      case 'win32': {
+        const downloadPath = await tc.downloadTool(urls[osPlatform][osArch]);
+        const zipPath = `${downloadPath}.zip`;
+        await io.mv(downloadPath, zipPath);
+        return await tc.extractZip(zipPath);
+      }
       case 'darwin':
         // Check if stackql is already installed using brew list --formula
         core.info(`checking if stackql is already installed...`);
@@ -39,10 +57,6 @@ async function downloadCLI (osPlatform) {
         const installedPath = execSync('which stackql', { encoding: 'utf-8' }).trim();
         core.debug(`stackql installed at: ${installedPath}`);
         return path.dirname(installedPath);
-      case 'linux':
-        return await tc.extractZip(await tc.downloadTool(urls[osPlatform]));
-      default:
-        throw new Error(`unsupported platform: ${osPlatform}`);
     }
   } catch (error) {
     core.error(`failed to install stackql: ${error}`);
@@ -56,11 +70,12 @@ async function makeExecutable (cliPath, osPlatform) {
       return;
     } else {
       core.debug(`making ${cliPath} executable...`);
-      execSync(`chmod +x ${cliPath}/stackql`);
+      fs.chmodSync(path.join(cliPath, 'stackql'), 0o755);
     }
     core.debug(`successfully made ${cliPath} executable`);
   } catch (error) {
     core.error(`Error: ${error.message}`);
+    throw error;
   }
 }
 
@@ -101,11 +116,11 @@ async function setup () {
     // get runner os
     const osPlatform = os.platform();
     core.debug(`platform: ${osPlatform}`);
-    const osArch = os.arch();
+    const osArch = (process.env.RUNNER_ARCH || os.arch()).toLowerCase();
     core.debug(`arch: ${osArch}`);
 
     // download and extract stackql binary
-    const cliPath = await downloadCLI(osPlatform);
+    const cliPath = await downloadCLI(osPlatform, osArch);
 
     core.debug(`path to cli: ${cliPath}`);
 

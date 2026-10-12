@@ -4,7 +4,17 @@
 
 The `stackql/setup-stackql` action is a JavaScript action that sets up StackQL CLI in your GitHub Actions workflow by downloading a latest Stackql CLI and adding it to the `PATH`.
 
-This action can be run on `ubuntu-latest`, `windows-latest`, and `macos-latest` GitHub Actions runners, and will install and expose the latest version of the `stackql` CLI on the runner environment.  
+This action supports AMD64 and ARM64 on Linux, Windows, and macOS. Linux and Windows runners receive the matching native release binary. macOS uses Homebrew. Architecture selection uses `RUNNER_ARCH`, falling back to the Node.js architecture outside Actions. Other platforms and architectures are rejected.
+
+CI covers all six targets:
+
+| Platform | AMD64 runner | ARM64 runner |
+| --- | --- | --- |
+| Linux | `ubuntu-24.04` | `ubuntu-24.04-arm` |
+| Windows | `windows-2025` | `windows-11-arm` |
+| macOS | `macos-15-intel` | `macos-15` |
+
+Each target is tested with `use_wrapper` enabled and disabled. The wrapper is installed on Linux and Windows; macOS continues to run the Homebrew binary directly. The `ubuntu-latest`, `windows-latest`, and `macos-latest` aliases are also supported.
 
 ## Usage
 Authentication to StackQL providers is done via environment variables source from GitHub Actions Secrets.  To learn more about authentication, see the setup instructions for your provider or providers at the [StackQL Provider Registry Docs](https://stackql.io/registry).

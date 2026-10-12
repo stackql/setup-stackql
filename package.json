@@ -1,10 +1,11 @@
 {
   "name": "setup-stackql",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "",
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "test": "node --experimental-test-module-mocks --test",
     "build": "cd wrapper && npm run build && cd .. && ncc build index.js --out dist",
     "prepare": "husky"
   },

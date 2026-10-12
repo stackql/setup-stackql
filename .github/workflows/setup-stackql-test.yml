@@ -12,22 +12,76 @@ defaults:
     shell: bash
 
 jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v7
+      with:
+        node-version: '24'
+    - run: npm ci --ignore-scripts
+    - run: npm test
+
   stackql-test-matrix:
-    name: Stackql local run on ${{ matrix.os }} ${{ matrix.use_wrapper && 'with' || 'without'  }} wrapper
-    runs-on: ${{ matrix.os }}
+    name: Stackql on ${{ matrix.target.os }} (${{ matrix.target.arch }}) ${{ matrix.use_wrapper && 'with' || 'without' }} wrapper
+    runs-on: ${{ matrix.target.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        target:
+        - { os: ubuntu-24.04, arch: X64 }
+        - { os: ubuntu-24.04-arm, arch: ARM64 }
+        - { os: windows-2025, arch: X64 }
+        - { os: windows-11-arm, arch: ARM64 }
+        - { os: macos-15-intel, arch: X64 }
+        - { os: macos-15, arch: ARM64 }
         use_wrapper: [true, false]
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
+
+    - name: Verify runner architecture
+      env:
+        EXPECTED_ARCH: ${{ matrix.target.arch }}
+      run: test "$RUNNER_ARCH" = "$EXPECTED_ARCH"
 
     - name: Setup Stackql
       uses: ./
       with:
         use_wrapper: ${{matrix.use_wrapper}}
+
+    - name: Verify native Windows binary architecture
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $binary = if ($env:STACKQL_CLI_PATH) {
+          Join-Path $env:STACKQL_CLI_PATH 'stackql-bin.exe'
+        } else {
+          (Get-Command stackql.exe).Source
+        }
+        $bytes = [IO.File]::ReadAllBytes($binary)
+        $pe = [BitConverter]::ToInt32($bytes, 0x3c)
+        $machine = [BitConverter]::ToUInt16($bytes, $pe + 4)
+        $expected = if ($env:RUNNER_ARCH -eq 'ARM64') { 0xaa64 } else { 0x8664 }
+        if ($machine -ne $expected) { throw 'Installed binary does not match runner architecture' }
+
+    - name: Verify native Linux or macOS binary architecture
+      if: runner.os != 'Windows'
+      run: |
+        binary="$(command -v stackql)"
+        if [[ -n "${STACKQL_CLI_PATH:-}" ]]; then
+          binary="$STACKQL_CLI_PATH/stackql-bin"
+        fi
+        if [[ "$RUNNER_OS" == 'macOS' ]]; then
+          arch=x86_64
+          if [[ "$RUNNER_ARCH" == 'ARM64' ]]; then arch=arm64; fi
+          lipo -verify_arch "$arch" "$binary"
+        else
+          arch='x86-64'
+          if [[ "$RUNNER_ARCH" == 'ARM64' ]]; then arch='ARM aarch64'; fi
+          file "$binary" | grep -E "ELF 64-bit.*$arch"
+        fi
 
     - name: Run Registry List
       id: run-registry-list

@@ -30,7 +30,7 @@ async function checkStackQL () {
     listeners,
     ignoreReturnCode: true
   };
-  const exitCode = await exec(pathToCLI, args, options);
+  const exitCode = await exec(`"${pathToCLI}"`, args, options);
   core.debug(`StackQL exited with code ${exitCode}.`);
   core.debug(`stdout: ${stdout.contents}`);
   core.debug(`stderr: ${stderr.contents}`);
