@@ -76,7 +76,7 @@ jobs:
         if [[ "$RUNNER_OS" == 'macOS' ]]; then
           arch=x86_64
           if [[ "$RUNNER_ARCH" == 'ARM64' ]]; then arch=arm64; fi
-          lipo -verify_arch "$arch" "$binary"
+          lipo "$binary" -verify_arch "$arch"
         else
           arch='x86-64'
           if [[ "$RUNNER_ARCH" == 'ARM64' ]]; then arch='ARM aarch64'; fi
