@@ -1,4 +1,21 @@
-[![Setup StackQL](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml/badge.svg)](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml)  
+[stars]: https://img.shields.io/github/stars/stackql/stackql?style=flat-square "GitHub Stars"
+[logo]: https://stackql.io/img/stackql-logo-bold.png "stackql logo"
+[stackql]: https://github.com/stackql/stackql
+[homepage]: https://stackql.io/
+[downloads]: https://img.shields.io/github/downloads/stackql/stackql/total?label=github%20downloads
+
+<div align="center">
+
+[![logo]][homepage]  
+
+[![Marketplace](https://img.shields.io/badge/Marketplace-setup--stackql-blue?logo=github)](https://github.com/marketplace/actions/setup-stackql)
+[![Release](https://img.shields.io/github/v/release/stackql/setup-stackql)](https://github.com/stackql/setup-stackql/releases)
+[![CI](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml/badge.svg)](https://github.com/stackql/setup-stackql/actions/workflows/setup-stackql-test.yml)
+[![License](https://img.shields.io/github/license/stackql/setup-stackql)](LICENSE)
+![downloads]
+[![stars]][stackql]
+
+</div>
 
 # setup-stackql
 
