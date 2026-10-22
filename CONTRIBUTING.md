@@ -4,7 +4,7 @@ Before contributing, read [README.md](./README.md) for project scope.
 
 ## Setup
 
-Use Node.js 24 to match the action runtime and CI. Install Git and npm, then run these commands from the repository root:
+Use Node.js 24.22.1 or later to match the action runtime and CI. Earlier Node.js 24 releases are affected by the [October 2026 Node.js security releases](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases). Install Git and npm, then run these commands from the repository root:
 
 ```sh
 npm ci
